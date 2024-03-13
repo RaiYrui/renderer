@@ -1,17 +1,19 @@
 #pragma once
 #include<vector>
 #include"RObject.h"
-/// <summary>
-/// 渲染实现类
-/// </summary>
-class Render {
-private:
-	int drawsize;
-	GLuint vao;
-	GLuint vbo;
-	GLuint vertexbuffer, uvbuffer, normalbuffer;
-	std::unordered_map<std::string, GLuint>vaomap;
-public:
-	void render(std::vector<RObject*>& entitylist);
-	Render();
-};
+namespace RR {
+	/// <summary>
+	/// 渲染实现类
+	/// </summary>
+	class Render {
+	private:
+		int drawsize;
+		GLuint vao;
+		GLuint vbo;
+		GLuint vertexbuffer, uvbuffer, normalbuffer;
+		std::unordered_map<std::string, GLuint>vaomap;
+	public:
+		void render(std::vector<RObject*>& entitylist);
+		Render();
+	};
+}

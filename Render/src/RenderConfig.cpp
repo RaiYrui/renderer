@@ -1,23 +1,25 @@
 #include"RenderConfig.h"
-void RenderConfig::NormalUnformset() {
+namespace RR {
+	void RenderConfig::NormalUnformset() {
 
-}
-void RenderConfig::Uniformset(std::shared_ptr<Shader> shader) {
-	this->shader = shader;
-	switch (Type)
-	{
-	case Normal:
-		this->NormalUnformset();
-		break;
-	case ulit:
-		break;
-	default:
-		break;
 	}
-}
-RenderConfig::RenderConfig() {
-	this->Type = Normal;
-}
-RenderConfig::RenderConfig(const ConfigType& type) {
-	this->Type = type;
+	void RenderConfig::Uniformset(std::shared_ptr<Shader> shader) {
+		this->shader = shader;
+		switch (Type)
+		{
+		case Normal:
+			this->NormalUnformset();
+			break;
+		case ulit:
+			break;
+		default:
+			break;
+		}
+	}
+	RenderConfig::RenderConfig() {
+		this->Type = Normal;
+	}
+	RenderConfig::RenderConfig(const ConfigType& type) {
+		this->Type = type;
+	}
 }
