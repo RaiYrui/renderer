@@ -10,9 +10,12 @@ namespace RR {
 		}
 	}
 	Control::Control() {
-		glfwSetKeyCallback(Window::glfw_window, Keyboard_action);
+		//glfwSetKeyCallback(Window::glfw_window, Keyboard_action);
 	}
 	void Control::ToString() {
 		std::cout << "Control" << std::endl;
+	}
+	void Control::Input() {
+
 	}
 }

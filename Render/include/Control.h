@@ -17,6 +17,7 @@ namespace RR {
 
 	public:
 		virtual void ToString();
+		virtual void Input();
 		Control();
 	};
 }

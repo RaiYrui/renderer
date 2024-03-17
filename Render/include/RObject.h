@@ -18,10 +18,12 @@ namespace RR {
 		//添加组件
 		Component* AddComponent(const std::string& name);
 		Component* GetComponent(const std::string& name);
+		void MoveTo(const glm::vec3& pos);
 		//调用组件的Start
 		void Start() override;
 		//调用组件的Update
 		void Update() override;
 		virtual void ToString()override;
+		~RObject();
 	};
 }

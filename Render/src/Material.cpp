@@ -23,7 +23,7 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(1, 1, 1, 1);
+		this->color = glm::vec4(0.8, 0.8, 0.8, 1);
 	}
 	void Material::AddShader(Shader* shader) {
 		this->shader = std::make_shared<Shader>(*shader);
@@ -97,5 +97,6 @@ namespace RR {
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
 		this->shader->SetVec3("Lightpos", this->lights[0]->Getpos());
 		this->shader->SetVec4("Lightcolor", this->lights[0]->GetColor());
+		this->shader->SetFloat("time", glfwGetTime());
 	}
 }

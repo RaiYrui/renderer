@@ -44,6 +44,15 @@ namespace RR {
 			num /= 10;
 		}
 		this->name = "ÎïÌå" + c;
-		this->AddComponent("Transform");
+		this->transform = std::dynamic_pointer_cast<Transform>(std::shared_ptr<Component>(this->AddComponent("Transform")));
+	}
+	void RObject::MoveTo(const glm::vec3& pos) {
+		this->transform->Translate(pos);
+	}
+	RObject::~RObject() {
+		for (auto it : this->components) {
+			delete it.second;
+			it.second = nullptr;
+		}
 	}
 }

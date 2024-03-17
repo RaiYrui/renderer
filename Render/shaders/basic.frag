@@ -18,7 +18,7 @@ void main(){
 	float cos = clamp(dot(n,L),1,0);
 	FragColor = 
 	ambientcolor+
-	diffuse * Lightcolor *5.0f* cos+
+	diffuse * Lightcolor *0.8f* cos+
 	spec * Lightcolor * 0.5f;
 	// FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

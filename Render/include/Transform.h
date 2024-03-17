@@ -1,6 +1,7 @@
 #pragma once
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
+#include<glm/gtc/quaternion.hpp>
 #include"Component.h"
 namespace RR {
 	/// <summary>
@@ -9,9 +10,12 @@ namespace RR {
 	class Transform : public Component {
 	private:
 		glm::vec3 localPosition;
-		glm::vec3 localRotation;
+		glm::quat localRotation;
 		glm::vec3 localScale;
 		glm::mat4 pos;
+		glm::mat4 translation_mat;
+		glm::mat4 rotation_mat;
+		glm::mat4 scale_mat;
 		glm::vec3 up;
 	public:
 		void Start()override;
@@ -19,9 +23,10 @@ namespace RR {
 		void Destroy()override;
 		Transform();
 		void Translate(const glm::vec3& position);
-		void Rotate(const glm::vec3& axis, float angle);
+		void Rotate(const glm::vec3& axis,const float& angle);
 		void Scale(const glm::vec3& scale);
 		glm::vec3 Position();
 		glm::vec3 Up();
+		glm::vec3 Foward();
 	};
 }

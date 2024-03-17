@@ -69,7 +69,8 @@ namespace RR {
     }
     void Mesh::draw() {
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, this->mesh_data->vertex.size());
+        //glDrawArrays(GL_TRIANGLES, 0, this->mesh_data->vertex.size());
+        glDrawArrays(GL_LINE_STRIP, 0, this->mesh_data->vertex.size());
         glBindVertexArray(0);
     }
     void Mesh::Load(const char* path) {

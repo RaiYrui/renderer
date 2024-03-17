@@ -2,11 +2,12 @@
 namespace RR {
 	Camera::Camera() {
 		this->transform = std::make_shared<Transform>();
-		this->transform->Translate(glm::vec3(10.0f, 5.0f, 5.0f));
+		this->transform->Translate(glm::vec3(5.0f, 1.0f, -15.0f));
+		this->transform->Rotate(glm::vec3(0, 1, 0), -20);
 		this->Setpers(45.0f, 1200, 900, 0.1f, 100.0f);
-		this->view = glm::lookAt(this->transform->Position(), glm::vec3(0, 0, 0), this->transform->Up());
+		this->view = glm::lookAt(this->transform->Position(), this->transform->Position() + this->transform->Foward(), this->transform->Up());
 		this->Changetype(Perspective);
-		projecton = this->Getprojection();
+		this->projecton = this->Getprojection();
 	}
 	void Camera::Setpers(const float& fov, const int& width, const int& height, const float& nearp, const float& farp) {
 		this->fov = fov;
@@ -24,10 +25,10 @@ namespace RR {
 	void Camera::Changetype(const CamType& type) {
 		this->type = type;
 		if (this->type == Perspective) {
-			projecton = glm::perspective(glm::radians(this->fov), (float)this->width / this->height, this->nearp, this->farp);
+			this->projecton = glm::perspective(glm::radians(this->fov), (float)this->width / this->height, this->nearp, this->farp);
 		}
 		else {
-			projecton = glm::ortho(-(this->width / 2.0f), (this->width / 2.0f), -(this->height / 2.0f), (this->height / 2.0f));
+			this->projecton = glm::ortho(-(this->width / 2.0f), (this->width / 2.0f), -(this->height / 2.0f), (this->height / 2.0f));
 		}
 	}
 	glm::mat4 Camera::Getprojection() {
@@ -40,12 +41,26 @@ namespace RR {
 
 	}
 	void Camera::Update() {
-
+		this->control->Input();
+		this->view = glm::lookAt(this->transform->Position(), this->transform->Position() + this->transform->Foward(), this->transform->Up());
+		this->projecton = this->Getprojection();
 		Mesh::projection = this->projecton;
 		Mesh::view = this->view;
 		Mesh::campos = this->transform->Position();
 	}
 	void Camera::MoveTo(const glm::vec3& pos) {
 		this->transform->Translate(pos);
+	}
+	void Camera::Rotate(const glm::vec3& axis, const float& angle) {
+		this->transform->Rotate(axis, angle);
+	}
+	glm::vec3 Camera::Forward() {
+		return this->transform->Foward();
+	}
+	glm::vec3 Camera::Right() {
+		return glm::normalize(glm::cross(this->transform->Foward(), this->transform->Up()));
+	}
+	glm::vec3 Camera::Up() {
+		return this->transform->Up();
 	}
 }

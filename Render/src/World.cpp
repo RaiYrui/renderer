@@ -31,7 +31,7 @@ namespace RR {
 		RObject* cube = new RObject();
 		cube->name = "cube";
 		Mesh* mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
-		mesh->Load("../../../../Render/mesh/testm.obj");
+		mesh->Load("../../../../Render/mesh/wavetest.obj");
 		mesh->GPUupload();
 
 		EntityList.emplace_back(cube);

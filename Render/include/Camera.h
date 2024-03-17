@@ -26,6 +26,10 @@ namespace RR {
 		void Setpers(const float& fov, const int& width, const int& height, const float& nearp, const float& farp);
 		void Setorth(const int& width, const int& height, const float& nearp, const float& farp);
 		void MoveTo(const glm::vec3& pos);
+		void Rotate(const glm::vec3& axis, const float& angle);
+		glm::vec3 Forward();
+		glm::vec3 Right();
+		glm::vec3 Up();
 		glm::mat4 Getview();
 		glm::mat4 Getprojection();
 		void Start() override;
