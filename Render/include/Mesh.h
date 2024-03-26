@@ -22,6 +22,7 @@ namespace RR {
 		GLuint vao, vertexbuffer, uvbuffer, normalbuffer;
 		int drawsize;
 		void setGlobaluniform();
+		void draw();
 	public:
 		static glm::mat4 view;
 		static glm::mat4 projection;
@@ -34,7 +35,6 @@ namespace RR {
 		void Update()override;
 		void Destroy()override;
 		void GPUupload();
-		void draw();
 		std::shared_ptr<Material> getmaterial();
 	};
 }

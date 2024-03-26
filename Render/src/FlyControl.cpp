@@ -35,10 +35,10 @@ namespace RR {
 			this->camera->MoveTo(-this->camera->Forward() * 0.1f);
 		}
 		if (glfwGetKey(Window::glfw_window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-			this->camera->MoveTo(this->camera->Up() * 0.1f);
+			this->camera->MoveTo(glm::vec3(0,1,0) * 0.1f);
 		}
 		if (glfwGetKey(Window::glfw_window, GLFW_KEY_C) == GLFW_PRESS) {
-			this->camera->MoveTo(-this->camera->Up() * 0.1f);
+			this->camera->MoveTo(-glm::vec3(0, 1, 0) * 0.1f);
 		}
 	}
 	void FlyControl::Cursor_update() {

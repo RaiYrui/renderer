@@ -42,7 +42,7 @@ namespace RR {
 	}
 	void Camera::Update() {
 		this->control->Input();
-		this->view = glm::lookAt(this->transform->Position(), this->transform->Position() + this->transform->Foward(), this->transform->Up());
+		this->view = glm::lookAt(this->transform->Position(), this->transform->Position() + this->transform->Foward(), glm::vec3(0,1,0));
 		this->projecton = this->Getprojection();
 		Mesh::projection = this->projecton;
 		Mesh::view = this->view;

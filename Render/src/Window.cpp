@@ -41,16 +41,6 @@ namespace RR {
         glfwSwapInterval(1);
 
         glViewport(0, 0, width, height);
-
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-        ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(glfw_window, true);
-        ImGui_ImplOpenGL3_Init("#version 330");
         return true;
     }
     void Window::Close() {
