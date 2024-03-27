@@ -21,6 +21,7 @@ namespace RR {
 		void Start()override;
 		void Update()override;
 		void Destroy()override;
+		void Inspector_dis()override;
 		Transform();
 		void Translate(const glm::vec3& position);
 		void Rotate(const glm::vec3& axis,const float& angle);
@@ -28,5 +29,6 @@ namespace RR {
 		glm::vec3 Position();
 		glm::vec3 Up();
 		glm::vec3 Foward();
+		~Transform();
 	};
 }

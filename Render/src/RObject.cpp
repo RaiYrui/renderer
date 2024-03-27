@@ -7,6 +7,7 @@ namespace RR {
 			components[name] = (Component*)CreateClass(name);
 			components[name]->entity = std::make_shared<RObject>(*this);
 			components[name]->name += (" of " + this->name);
+			components[name]->Start();
 			return components[name];
 		}
 		else {
@@ -25,9 +26,9 @@ namespace RR {
 		std::cout << this->name << std::endl;
 	}
 	void RObject::Start() {
-		for (const auto& com : this->components) {
-			com.second->Start();
-		}
+		//for (const auto& com : this->components) {
+		//	com.second->Start();
+		//}
 	}
 	void RObject::Update() {
 		for (const auto& com : this->components) {
@@ -53,6 +54,11 @@ namespace RR {
 		for (auto it : this->components) {
 			delete it.second;
 			it.second = nullptr;
+		}
+	}
+	void RObject::component_dis() {
+		for (const auto& com : this->components) {
+			com.second->Inspector_dis();
 		}
 	}
 }

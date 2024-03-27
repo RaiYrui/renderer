@@ -13,10 +13,16 @@ namespace RR {
 	private:
 		static Window* window;
 		Window();
+
 	public:
+		int width, height;
+		int gl_width, gl_height;
+		int Ins_width, Ins_height;
+		int R_width, R_height;
+		int H_width, H_height;
 		static Window* getInstance();
 		bool Init();
-		int width, height;
+		void Resize();
 		static GLFWwindow* glfw_window;
 		void Close();
 	};

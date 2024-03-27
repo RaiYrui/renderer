@@ -44,7 +44,15 @@ namespace RR {
 	void Transform::Destroy() {
 
 	}
+	void Transform::Inspector_dis() {
+		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+		}
+	}
 	glm::vec3 Transform::Foward() {
 		return glm::normalize(this->localRotation * glm::vec4(glm::vec3(0, 0, 1), 0.0f));
+	}
+	Transform::~Transform() {
+
 	}
 }

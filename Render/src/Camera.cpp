@@ -63,4 +63,7 @@ namespace RR {
 	glm::vec3 Camera::Up() {
 		return this->transform->Up();
 	}
+	void Camera::component_dis() {
+
+	}
 }

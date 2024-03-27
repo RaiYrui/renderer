@@ -9,4 +9,7 @@ namespace RR {
 	void Object::Update() {
 
 	}
+	Object::~Object() {
+
+	}
 }

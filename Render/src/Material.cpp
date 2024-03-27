@@ -98,6 +98,9 @@ namespace RR {
 		this->shader->SetVec3("Lightpos", this->lights[0]->Getpos());
 		this->shader->SetVec4("Lightcolor", this->lights[0]->GetColor());
 		this->shader->SetFloat("time", glfwGetTime());
-		this->shader->SetVec4("wavep", glm::vec4(0,0,1,0));
+		this->shader->SetVec4("wavep", glm::vec4(1.0f,4.0f,0.8,3));
+		this->shader->SetVec4("wavep2", glm::vec4(-5.0f, 1.0f, 0.5, 2));
+		this->shader->SetVec4("wavep3", glm::vec4(-1.0f, -6.0f, 0.2, 1));
+		
 	}
 }

@@ -29,12 +29,18 @@ namespace RR {
 	}
 	void World::CreateSomething() {
 		RObject* cube = new RObject();
-		cube->name = "cube";
+		cube->name = "wave";
 		Mesh* mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
 		mesh->Load("../../../../Render/mesh/wavetest.obj");
 		mesh->GPUupload();
 
 		EntityList.emplace_back(cube);
+		//RObject* cube2 = new RObject();
+		//cube2->name = "cube2";
+		//mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
+		//mesh->Load("../../../../Render/mesh/testm.obj");
+		//mesh->GPUupload();
+		//EntityList.emplace_back(cube2);
 	}
 	std::shared_ptr<Camera> World::Maincamera() {
 		auto it = this->cameras.find("Maincamera");
@@ -43,6 +49,12 @@ namespace RR {
 		}
 		return nullptr;
 	}
+	std::vector<RObject*>& World::get_Entitylist() {
+		return this->EntityList;
+	}
+	std::vector<std::shared_ptr<Light>>& World::get_Lights() {
+		return this->Lights;
+	}
 	void World::Remove(const char* name) {
 		for (auto obj = EntityList.begin(); obj != EntityList.end(); obj++) {
 			if ((*obj)->name == name) {
@@ -50,6 +62,12 @@ namespace RR {
 				delete (*obj);
 				(*obj) = nullptr;
 			}
+		}
+	}
+	World::~World() {
+		for (RObject* obj : this->EntityList) {
+			delete obj;
+			obj = nullptr;
 		}
 	}
 }

@@ -32,6 +32,11 @@ namespace RR {
     void Mesh::Destroy() {
 
     }
+    void Mesh::Inspector_dis() {
+        if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+        }
+    }
     Mesh::Mesh() {
         this->name = "Mesh";
         material = std::make_shared<Material>();
@@ -78,5 +83,7 @@ namespace RR {
     }
     std::shared_ptr<Material> Mesh::getmaterial() {
         return this->material;
+    }
+    Mesh::~Mesh() {
     }
 }

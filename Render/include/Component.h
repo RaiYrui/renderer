@@ -1,4 +1,6 @@
 #pragma once
+#include<IMGUI/imgui_impl_glfw.h>
+#include<IMGUI/imgui_impl_opengl3.h>
 #include"Object.h"
 namespace RR {
 	/// <summary>
@@ -12,5 +14,7 @@ namespace RR {
 		virtual void Start() = 0;
 		virtual void Update() = 0;
 		virtual void Destroy() = 0;
+		virtual void Inspector_dis()=0;
+		virtual ~Component()= 0;
 	};
 }

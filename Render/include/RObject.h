@@ -23,6 +23,7 @@ namespace RR {
 		void Start() override;
 		//调用组件的Update
 		void Update() override;
+		void component_dis() override;
 		virtual void ToString()override;
 		~RObject();
 	};

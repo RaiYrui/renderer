@@ -4,8 +4,9 @@ namespace RR {
     GLFWwindow* Window::glfw_window;
     Window::Window() {
         this->glfw_window = nullptr;
-        width = 1200;
-        height = 900;
+        this->width = 1200;
+        this->height = 900;
+        this->Resize();
     }
     Window* Window::getInstance() {
         if (window == nullptr)
@@ -42,6 +43,16 @@ namespace RR {
 
         glViewport(0, 0, width, height);
         return true;
+    }
+    void Window::Resize() {
+        this->gl_width = this->width / 2;
+        this->gl_height = this->height * 2 / 3;
+        this->Ins_width = this->width / 4;
+        this->Ins_height = this->height * 2 / 3;
+        this->H_width = this->width / 4;
+        this->H_height = this->height * 2 / 3;
+        this->R_width = this->width;
+        this->R_height = this->height / 3;
     }
     void Window::Close() {
         glfwTerminate();

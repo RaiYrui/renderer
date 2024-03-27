@@ -34,7 +34,9 @@ namespace RR {
 		void Start()override;
 		void Update()override;
 		void Destroy()override;
+		void Inspector_dis()override;
 		void GPUupload();
 		std::shared_ptr<Material> getmaterial();
+		~Mesh();
 	};
 }

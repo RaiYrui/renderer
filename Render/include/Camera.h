@@ -34,5 +34,6 @@ namespace RR {
 		glm::mat4 Getprojection();
 		void Start() override;
 		void Update()override;
+		void component_dis()override;
 	};
 }

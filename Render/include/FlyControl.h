@@ -2,6 +2,9 @@
 #include "Control.h"
 #include"Camera.h"
 namespace RR {
+	/// <summary>
+	/// ∑…–– ”Ω«
+	/// </summary>
 	class FlyControl : public Control {
 	private:
 		void KeyBoard_upadate();

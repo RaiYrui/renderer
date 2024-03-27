@@ -22,6 +22,9 @@ namespace RR {
 		void Init();
 		void Startp();
 		void Remove(const char* name);
+		std::vector<RObject*>& get_Entitylist();
+		std::vector<std::shared_ptr<Light>>& get_Lights();
 		std::shared_ptr<Camera> Maincamera();
+		~World();
 	};
 }
