@@ -23,7 +23,7 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.4, 0.5, 1.0, 1);
+		this->color = glm::vec4(0.4, 0.5, 1.0, 1.0f);
 	}
 	void Material::AddShader(Shader* shader) {
 		this->shader = std::make_shared<Shader>(*shader);

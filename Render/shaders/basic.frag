@@ -20,5 +20,6 @@ void main(){
 	ambientcolor+
 	diffuse * Lightcolor *0.8f* cos+
 	spec * Lightcolor * 0.5f;
+	FragColor.a = 0.6f;
 	// FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 }

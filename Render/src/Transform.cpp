@@ -17,19 +17,12 @@ namespace RR {
 		return glm::normalize(this->localRotation * glm::vec4(glm::vec3(0,1,0), 0.0f));
 	}
 	void Transform::Translate(const glm::vec3& position) {
-		this->translation_mat = glm::translate(this->translation_mat, position);
-		this->localPosition.x = this->translation_mat[3][0];
-		this->localPosition.y = this->translation_mat[3][1];
-		this->localPosition.z = this->translation_mat[3][2];
-
+		this->localPosition += position;
 	}
 	void Transform::Rotate(const glm::vec3& axis,const float& angle) {
-		this->rotation_mat = glm::rotate(this->rotation_mat, glm::radians(angle), axis);
-		//赋值给旋转的变量，用旋转矩阵
-		this->localRotation = glm::quat_cast(this->rotation_mat);
+		this->localRotation = glm::angleAxis(glm::radians(angle), axis) * this->localRotation;
 	}
 	void Transform::Scale(const glm::vec3& scale) {
-		this->scale_mat = glm::scale(this->scale_mat, scale);
 		this->localScale.x *= scale.x;
 		this->localScale.y *= scale.y;
 		this->localScale.z *= scale.z;
@@ -39,6 +32,9 @@ namespace RR {
 		std::cout << "Transform start" << std::endl;
 	}
 	void Transform::Update() {
+		this->translation_mat = glm::translate(glm::mat4(1.0f), this->localPosition);
+		this->rotation_mat = glm::mat4_cast(this->localRotation);
+		this->scale_mat = glm::scale(glm::mat4(1.0f), this->localScale);
 		this->pos = this->translation_mat * this->rotation_mat * this->scale_mat * this->pos;
 	}
 	void Transform::Destroy() {
@@ -46,7 +42,9 @@ namespace RR {
 	}
 	void Transform::Inspector_dis() {
 		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-
+			ImGui::DragFloat("Position x", &this->localPosition.x, 0.5f, -FLT_MAX, FLT_MAX, "%.3f");
+			ImGui::DragFloat("Position y", &this->localPosition.y, 0.5f, -FLT_MAX, FLT_MAX, "%.3f");
+			ImGui::DragFloat("Position z", &this->localPosition.z, 0.5f, -FLT_MAX, FLT_MAX, "%.3f");
 		}
 	}
 	glm::vec3 Transform::Foward() {

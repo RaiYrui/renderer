@@ -6,6 +6,8 @@ namespace RR {
         this->window = Window::getInstance();
         this->main_viewport = nullptr;
         this->window_flags = 0;
+        this->utype = U_Entity;
+        this->dis_index = -1;
 	}
 	void UWidget::Init() {
         IMGUI_CHECKVERSION();
@@ -37,15 +39,15 @@ namespace RR {
             return;
         }
         //添加Light
-        std::vector<std::shared_ptr<Light>>& lights = this->world->get_Lights();
         ImGuiTreeNodeFlags light_flag = base_flags;
+        this->lights = this->world->get_Lights();
         if ((selection_mask & (1 << index)) != 0)
             light_flag |= ImGuiTreeNodeFlags_Selected;
         bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)index, light_flag, "Lights");
         //点击灯光组
         if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
             node_clicked = index;
-
+            this->dis_index = -1;
         }
         if (node_open) {
             ImGuiTreeNodeFlags lights_flag = base_flags;
@@ -59,14 +61,15 @@ namespace RR {
                 //点击灯光Item
                 if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
                     node_clicked = index;
-
+                    this->utype = U_Light;
+                    this->dis_index = j;
                 }
             }
             ImGui::TreePop();
         }
         ImGuiTreeNodeFlags entity_flag = base_flags;
         entity_flag |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-        std::vector<RObject*> &El = this->world->get_Entitylist();
+        this->El = this->world->get_Entitylist();
         //每个物体
         for (int j=0 ; j <El.size(); ++j) {
             ++index;
@@ -76,7 +79,8 @@ namespace RR {
             //点击物体Item
             if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
                 node_clicked = index;
-                //El[j]->component_dis();
+                this->utype = U_Entity;
+                this->dis_index = j;
             }
         }
         if (node_clicked != -1)
@@ -102,6 +106,18 @@ namespace RR {
             ImGui::End();
             return;
         }
+        if (this->dis_index >= 0) {
+            if (this->utype == U_Entity) {
+                this->El[this->dis_index]->component_dis();
+            }
+            else if (this->utype == U_Light) {
+                this->lights[this->dis_index]->component_dis();
+            }
+            else {
+
+            }
+        }
+
         ImGui::End();
     }
     void UWidget::Resources() {

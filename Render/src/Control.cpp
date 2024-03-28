@@ -12,6 +12,8 @@ namespace RR {
 	Window* Control::window = nullptr;
 	Control::Control() {
 		//glfwSetKeyCallback(Window::glfw_window, Keyboard_action);
+		this->c_xpos = 0.0;
+		this->c_ypos = 0.0;
 		this->selected = false;
 		this->window = Window::getInstance();
 	}

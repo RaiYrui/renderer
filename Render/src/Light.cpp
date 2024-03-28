@@ -34,6 +34,7 @@ namespace RR {
 		return this->intensity;
 	}
 	void Light::component_dis() {
+		this->transform->Inspector_dis();
 
 	}
 }
