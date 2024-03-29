@@ -5,15 +5,14 @@ namespace RR {
     glm::vec3 Mesh::campos;
     std::unordered_map<std::string, GLuint> Mesh::vaomap;
     void Mesh::Start() {
-        RObject* entity = dynamic_cast<RObject*>(this->entity.get());
-        this->transform = std::make_shared<Transform>(*dynamic_cast<Transform*>(entity->GetComponent("Transform")));
+        this->transform.reset(dynamic_cast<Transform*>(this->entity->GetComponent("Transform")));
         std::cout << "mesh start" << std::endl;
     }
     void Mesh::setGlobaluniform() {
         uniform_data model, view, projection, Campos;
-        model.Mat4 = glm::mat4(1.0f);
         //model.Mat4 = glm::scale(model.Mat4, glm::vec3(0.1f, 0.1f, 0.1f));
-        model.Mat4 = glm::translate(model.Mat4, glm::vec3(0, 0, 0));
+        model.Mat4 = this->transform->Pos_mat();
+        std::cout << model.Mat4[3][1];
         this->material->setUniform("model", Mat4, model);
         view.Mat4 = Mesh::view;
         this->material->setUniform("view", Mat4, view);

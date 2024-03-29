@@ -13,6 +13,9 @@ namespace RR {
 	glm::vec3 Transform::Position() {
 		return this->localPosition;
 	}
+	glm::mat4 Transform::Pos_mat() {
+		return this->pos;
+	}
 	glm::vec3 Transform::Up() {
 		return glm::normalize(this->localRotation * glm::vec4(glm::vec3(0,1,0), 0.0f));
 	}
@@ -35,7 +38,7 @@ namespace RR {
 		this->translation_mat = glm::translate(glm::mat4(1.0f), this->localPosition);
 		this->rotation_mat = glm::mat4_cast(this->localRotation);
 		this->scale_mat = glm::scale(glm::mat4(1.0f), this->localScale);
-		this->pos = this->translation_mat * this->rotation_mat * this->scale_mat * this->pos;
+		this->pos = this->translation_mat  * glm::mat4(1.0f);
 	}
 	void Transform::Destroy() {
 

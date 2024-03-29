@@ -16,9 +16,8 @@ namespace RR {
 		}
 	}
 	Component* RObject::GetComponent(const std::string& name) {
-		Component* res = components[name];
-		if (res)
-			return res;
+		if (this->components.find(name)!= this->components.end())
+			return this->components[name];
 		else
 			return nullptr;
 	}

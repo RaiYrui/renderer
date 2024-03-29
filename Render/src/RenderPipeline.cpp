@@ -8,7 +8,7 @@ namespace RR {
 	}
 	void RenderPipeline::Init(std::vector<RObject*>& entitylist) {
 		for (RObject* object : entitylist) {
-			Mesh* mesh = (Mesh*)object->GetComponent("Mesh");
+			Mesh* mesh = dynamic_cast<Mesh*>(object->GetComponent("Mesh"));
 			if (mesh)
 				mesh->material = this->mat;
 		}

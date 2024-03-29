@@ -20,7 +20,7 @@ vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent
 	 float speed = sqrt(9.8 / k);
 	float x = k*(dot(dir,originpos.xz) - speed*time);
 	float z = k*(originpos.z - time+0.5);
-	originpos.y = amplitude*sin(x);
+	originpos.y += amplitude*sin(x);
 	originpos.x += amplitude*cos(x) * dir.x;
 	originpos.z += amplitude*cos(x) * dir.y;
 	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x,amplitude*k*cos(x)* dir.x,0));

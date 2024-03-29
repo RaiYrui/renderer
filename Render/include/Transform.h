@@ -29,6 +29,7 @@ namespace RR {
 		glm::vec3 Position();
 		glm::vec3 Up();
 		glm::vec3 Foward();
+		glm::mat4 Pos_mat();
 		~Transform();
 	};
 }
