@@ -30,5 +30,6 @@ namespace RR {
 		void SetMat4(const std::string& name, const glm::mat4& value)const;
 		GLuint Compile();
 		std::string Key();
+		~Shader();
 	};
 }

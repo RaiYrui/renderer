@@ -35,6 +35,8 @@ namespace RR {
 		int dis_index;
 		std::vector<RObject*> El;
 		std::vector<std::shared_ptr<Light>> lights;
+		ImGuiIO *io;
+		static void HelpMarker(const char* desc);
 	public:
 		UWidget(std::shared_ptr<World>world = nullptr);
 		void Init();

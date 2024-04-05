@@ -88,4 +88,7 @@ namespace RR {
     std::string Shader::Key() {
         return this->key;
     }
+    Shader::~Shader() {
+
+    }
 }

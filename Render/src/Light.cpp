@@ -1,13 +1,18 @@
 #include"Light.h"
 namespace RR {
-	int Light::id = 0;
+	int Light::tid = 0;
 	Light::Light() {
 		this->color = glm::vec4(1.0f);
-		this->intensity = 10.0f;
+		this->intensity = 1.0f;
 		this->transform = std::make_shared<Transform>();
-		this->id++;
+		this->id = this->tid;
+		Mesh::global_uniform["Lightpos[" + std::to_string(this->id) + "]"] = std::make_shared<Uniform>(Vec3, glm::vec3());
+		Mesh::global_uniform["Lightcolor[" + std::to_string(this->id) + "]"] = std::make_shared<Uniform>(Vec4, glm::vec4());
+		Mesh::global_uniform["Intensity[" + std::to_string(this->id) + "]"] = std::make_shared<Uniform>(Float, 0);
+		Mesh::global_uniform["Lightnum"] = std::make_shared<Uniform>(Int, 0);
+		this->tid++;
 		std::string c;
-		int num = this->id;
+		int num = this->tid;
 		while (num > 0) {
 			int n = num % 10;
 			c += (n + '0');
@@ -22,7 +27,10 @@ namespace RR {
 		this->Moveto(glm::vec3(0, 5, 0));
 	}
 	void Light::Update() {
-
+		Mesh::global_uniform["Lightpos[" + std::to_string(this->id) + "]"]->data.Vec3 = this->Getpos();
+		Mesh::global_uniform["Lightcolor[" + std::to_string(this->id) + "]"]->data.Vec4 = this->color;
+		Mesh::global_uniform["Intensity[" + std::to_string(this->id) + "]"]->data.floatvalue = this->intensity;
+		Mesh::global_uniform["Lightnum"]->data.intvalue = Light::tid;
 	}
 	glm::vec3 Light::Getpos() {
 		return this->transform->Position();
@@ -35,6 +43,7 @@ namespace RR {
 	}
 	void Light::component_dis() {
 		this->transform->Inspector_dis();
-
+		ImGui::DragFloat("Intensity", &this->intensity, 0.25f, 0, FLT_MAX, "%.3f");
+		ImGui::ColorEdit4("set color", (float*)&this->color);
 	}
 }

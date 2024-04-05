@@ -51,17 +51,10 @@ namespace RR {
 			if (glfwGetMouseButton(Window::glfw_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 				this->pressed = false;
 			if (this->pressed) {
-				if (this->xlast < this->c_xpos)
-					this->camera->Rotate(glm::vec3(0, 1, 0), -1.0f);
-				else if (this->xlast > this->c_xpos)
-					this->camera->Rotate(glm::vec3(0, 1, 0), 1.0f);
-				if (this->ylast < this->c_ypos)
-					this->camera->Rotate(glm::vec3(1, 0, 0), 1.0f);
-				else if (this->ylast > this->c_ypos)
-					this->camera->Rotate(glm::vec3(1, 0, 0), -1.0f);
+				this->camera->Input(c_xpos - this->xlast, this->ylast - c_ypos);
 			}
-			this->xlast = c_xpos;
-			this->ylast = c_ypos;
 		}
+		this->xlast = c_xpos;
+		this->ylast = c_ypos;
 	}
 }

@@ -1,25 +1,14 @@
 #include "Mesh.h"
 namespace RR {
-    glm::mat4 Mesh::view;
-    glm::mat4 Mesh::projection;
-    glm::vec3 Mesh::campos;
+    std::unordered_map<std::string, std::shared_ptr<Uniform>> Mesh::global_uniform;
     std::unordered_map<std::string, GLuint> Mesh::vaomap;
     void Mesh::Start() {
-        this->transform.reset(dynamic_cast<Transform*>(this->entity->GetComponent("Transform")));
         std::cout << "mesh start" << std::endl;
     }
     void Mesh::setGlobaluniform() {
-        uniform_data model, view, projection, Campos;
-        //model.Mat4 = glm::scale(model.Mat4, glm::vec3(0.1f, 0.1f, 0.1f));
-        model.Mat4 = this->transform->Pos_mat();
-        std::cout << model.Mat4[3][1];
-        this->material->setUniform("model", Mat4, model);
-        view.Mat4 = Mesh::view;
-        this->material->setUniform("view", Mat4, view);
-        projection.Mat4 = Mesh::projection;
-        this->material->setUniform("projection", Mat4, projection);
-        Campos.Vec3 = this->campos;
-        this->material->setUniform("Campos", Vec3, Campos);
+        for (std::pair<std::string,std::shared_ptr<Uniform>> it : this->global_uniform) {
+            this->material->setUniform(it.first, it.second->type, it.second->data);
+        }
         this->material->renderConfig();
     }
     void Mesh::Update() {
@@ -33,12 +22,11 @@ namespace RR {
     }
     void Mesh::Inspector_dis() {
         if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen)) {
-
+            this->material->Render_ui();
         }
     }
     Mesh::Mesh() {
         this->name = "Mesh";
-        material = std::make_shared<Material>();
         mesh_data = std::make_shared<MeshItem>();
     }
     void Mesh::GPUupload() {
@@ -82,6 +70,9 @@ namespace RR {
     }
     std::shared_ptr<Material> Mesh::getmaterial() {
         return this->material;
+    }
+    void Mesh::setMat(std::shared_ptr<Material> mat) {
+        this->material = mat;
     }
     Mesh::~Mesh() {
     }

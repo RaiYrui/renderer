@@ -1,7 +1,7 @@
 #include "Material.h"
 namespace RR {
 	std::unordered_map<std::string, GLuint> Material::shadermap;
-	std::vector<std::shared_ptr<Light>> Material::lights;
+	uniform_data Material::env;
 	Color::Color(float red, float green, float blue, float alpha) {
 		this->r = red;
 		this->g = green;
@@ -23,7 +23,12 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.4, 0.5, 1.0, 1.0f);
+		this->color = glm::vec4(0.055f, 0.165f, 0.24f, 1.0f);
+		this->w1 = glm::vec4(3.5f, 3.0f, 0.8f, 3.0f);
+		this->w2 = glm::vec4(-0.25f, -0.75f, 0.75f, 2.25f);
+		this->w3 = glm::vec4(6.0f, -6.0f, 0.7f, 1.75f);
+		this->maintex = std::make_shared<Texture>("maintex");
+		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
 	}
 	void Material::AddShader(Shader* shader) {
 		this->shader = std::make_shared<Shader>(*shader);
@@ -95,12 +100,35 @@ namespace RR {
 	void Material::Normaluniform() {
 		this->shader->SetVec4("color", this->color);
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
-		this->shader->SetVec3("Lightpos", this->lights[0]->Getpos());
-		this->shader->SetVec4("Lightcolor", this->lights[0]->GetColor());
 		this->shader->SetFloat("time", glfwGetTime());
-		this->shader->SetVec4("wavep", glm::vec4(1.0f,4.0f,0.8,3));
-		this->shader->SetVec4("wavep2", glm::vec4(-5.0f, 1.0f, 0.5, 2));
-		this->shader->SetVec4("wavep3", glm::vec4(-1.0f, -6.0f, 0.2, 1));
+		this->shader->SetVec4("wavep", this->w1);
+		this->shader->SetVec4("wavep2",this->w2);
+		this->shader->SetVec4("wavep3", this->w3);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, env.intvalue);
+		this->shader->SetInt("cubemap", 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
+		this->shader->SetInt("maintex", 1);
 		
+	}
+	void Material::Render_ui() {
+		ImGui::Text("Main Color");
+		ImGui::ColorEdit4("set color", (float*)&this->color);
+		ImGui::Text("wave1");
+		ImGui::DragFloat("x dir", &this->w1.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("y dir", &this->w1.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("amplitude", &this->w1.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("k", &this->w1.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::Text("wave2");
+		ImGui::DragFloat("x2 dir", &this->w2.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("y2 dir", &this->w2.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("amplitude2", &this->w2.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("k2", &this->w2.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::Text("wave3");
+		ImGui::DragFloat("x3 dir", &this->w3.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("y3 dir", &this->w3.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("amplitude3", &this->w3.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("k3", &this->w3.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 	}
 }

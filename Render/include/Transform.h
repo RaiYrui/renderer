@@ -3,6 +3,7 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/quaternion.hpp>
 #include"Component.h"
+#include"Mesh.h"
 namespace RR {
 	/// <summary>
 	/// Transform类描述物体的变换信息
@@ -17,6 +18,8 @@ namespace RR {
 		glm::mat4 rotation_mat;
 		glm::mat4 scale_mat;
 		glm::vec3 up;
+		glm::vec3 eu_angle;
+		std::shared_ptr<Uniform> model;
 	public:
 		void Start()override;
 		void Update()override;

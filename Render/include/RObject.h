@@ -1,10 +1,10 @@
 #pragma once
 #include<iostream>
 #include"Object.h"
-#include "Transform.h"
-#include"Component.h"
+#include"Transform.h"
 #include"ComponentManager.h"
 namespace RR {
+	class Component;
 	/// <summary>
 	/// 渲染器物体基类
 	/// </summary>

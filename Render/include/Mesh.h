@@ -2,10 +2,7 @@
 #include<glm/gtc/matrix_transform.hpp>
 #include "Material.h"
 #include"Component.h"
-#include"Transform.h";
-#include"RObject.h"
 #include<vector>
-#include"Resources.h"
 namespace RR {
 	/// <summary>
 	/// 网格类
@@ -14,8 +11,6 @@ namespace RR {
 	private:
 		//网格数据
 		std::shared_ptr<MeshItem> mesh_data;
-		//Transform
-		std::shared_ptr<Transform> transform;
 		//模型数据路径
 		char* path;
 		static std::unordered_map<std::string, GLuint> vaomap;
@@ -23,18 +18,17 @@ namespace RR {
 		int drawsize;
 		void setGlobaluniform();
 		void draw();
-	public:
-		static glm::mat4 view;
-		static glm::mat4 projection;
-		static glm::vec3 campos;
 		//网格中存储材质
 		std::shared_ptr<Material> material;
+	public:
+		static std::unordered_map<std::string, std::shared_ptr<Uniform>>global_uniform;
 		Mesh();
 		void Load(const char* path);
 		void Start()override;
 		void Update()override;
 		void Destroy()override;
 		void Inspector_dis()override;
+		void setMat(std::shared_ptr<Material>mat);
 		void GPUupload();
 		std::shared_ptr<Material> getmaterial();
 		~Mesh();

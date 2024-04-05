@@ -10,15 +10,14 @@ namespace RR {
 		std::shared_ptr<Light>  light = std::make_shared<Light>();
 		light->Moveto(glm::vec3(0, 5, 5));
 		this->Lights.emplace_back(light);
+		light = std::make_shared<Light>();
+		light->Moveto(glm::vec3(2, 5, 0));
+		this->Lights.emplace_back(light);
 
 		for (RObject* object : this->EntityList) {
 			object->Start();
 		}
 		this->Maincamera()->Start();
-		for (auto light : this->Lights) {
-			light->Start();
-			Material::lights.push_back(light);
-		}
 	}
 	void World::Startp() {
 		this->Maincamera()->Update();

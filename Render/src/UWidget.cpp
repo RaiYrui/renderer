@@ -9,13 +9,23 @@ namespace RR {
         this->utype = U_Entity;
         this->dis_index = -1;
 	}
+    void UWidget::HelpMarker(const char * desc) {
+        ImGui::TextDisabled("(?)");
+        if (ImGui::BeginItemTooltip())
+        {
+            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+            ImGui::TextUnformatted(desc);
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+    }
 	void UWidget::Init() {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO();
-        (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
+        this->io = &ImGui::GetIO();
+        (void)this->io;
+        this->io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+        this->io->ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(Window::glfw_window, true);
         ImGui_ImplOpenGL3_Init("#version 330");
@@ -38,6 +48,7 @@ namespace RR {
             ImGui::End();
             return;
         }
+        UWidget::HelpMarker("Entity of the Scene");
         //Ìí¼ÓLight
         ImGuiTreeNodeFlags light_flag = base_flags;
         this->lights = this->world->get_Lights();
@@ -106,6 +117,7 @@ namespace RR {
             ImGui::End();
             return;
         }
+        UWidget::HelpMarker("Entity/Components Information");
         if (this->dis_index >= 0) {
             if (this->utype == U_Entity) {
                 this->El[this->dis_index]->component_dis();
@@ -134,6 +146,7 @@ namespace RR {
             ImGui::End();
             return;
         }
+        ImGui::Text("FPS: %.3f ms/frame (%.1f)", 1000.0f / this->io->Framerate, this->io->Framerate);
         ImGui::End();
     }
     void UWidget::updategui() {

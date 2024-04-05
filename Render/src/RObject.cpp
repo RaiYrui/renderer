@@ -50,7 +50,7 @@ namespace RR {
 		this->transform->Translate(pos);
 	}
 	RObject::~RObject() {
-		for (auto it : this->components) {
+		for (std::pair<std::string,Component*> it : this->components) {
 			delete it.second;
 			it.second = nullptr;
 		}

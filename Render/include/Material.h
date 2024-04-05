@@ -2,9 +2,10 @@
 #include<glm/glm.hpp>
 #include<unordered_map>
 #include<memory>
+#include<IMGUI/imgui.h>
 #include "Shader.h"
 #include "Resources.h"
-#include"Light.h"
+#include "Type.h"
 namespace RR {
 	//渲染设置
 	enum ConfigType
@@ -19,36 +20,26 @@ namespace RR {
 		Color* operator+(Color& col);
 		Color* operator -(Color& col);
 	};
-	enum Uniformv {
-		Vec3 = 0,
-		Vec4,
-		Float,
-		Int,
-		Mat4,
-		Bool
-	};
-	union uniform_data
-	{
-		bool boolvalue;
-		int intvalue;
-		float floatvalue;
-		glm::vec3 Vec3;
-		glm::vec4 Vec4;
-		glm::mat4 Mat4;
-	};
+
 	/// <summary>
 	/// 材质类
 	/// </summary>
 	class Material {
 	private:
 		static std::unordered_map<std::string, GLuint> shadermap;
+		std::unordered_map<std::string, std::shared_ptr<Uniform>> uniform_map;
 		std::shared_ptr<Texture> maintex;
 		std::shared_ptr<Shader> shader;
 		glm::vec4 color;
 		ConfigType type;
 		void Normaluniform();
+		//测试用
+		glm::vec4 w1, w2, w3;
 	public:
-		static std::vector<std::shared_ptr<Light>>lights;
+		//天空盒
+		static uniform_data env;
+		//UI对接
+		void Render_ui();
 		void Compileshader();
 		void AddShader(Shader* shader);
 		void RemoveShader();

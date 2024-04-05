@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include"Transform.h"
+#include"Mesh.h"
 namespace RR {
 	/// <summary>
 	/// µÆ¹â
@@ -10,7 +11,8 @@ namespace RR {
 		std::shared_ptr<Transform> transform;
 		glm::vec4 color;
 		float intensity;
-		static int id;
+		static int tid;
+		int id;
 	public:
 		//ÒÆ¶¯µÆ¹â
 		void Moveto(const glm::vec3& position);

@@ -6,7 +6,6 @@ namespace RR {
         }
     }
     Render::Render() {
-        glEnable(GL_DEPTH_TEST);
         drawsize = 0;
     }
 }
