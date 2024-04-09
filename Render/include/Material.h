@@ -35,13 +35,14 @@ namespace RR {
 		void Normaluniform();
 		//测试用
 		glm::vec4 w1, w2, w3;
+		glm::vec4 nst;
 	public:
 		//天空盒
 		static uniform_data env;
 		//UI对接
 		void Render_ui();
 		void Compileshader();
-		void AddShader(Shader* shader);
+		void AddShader(std::shared_ptr<Shader> shader);
 		void RemoveShader();
 		void setUniform(const std::string& name, Uniformv type, uniform_data value);
 		std::string getkey();

@@ -6,7 +6,7 @@ namespace RR {
 		this->tex = std::make_shared<Texture>("map");
         this->sky_shader = std::make_shared<Shader>("../../../../Render/shaders/skybox.vert", "../../../../Render/shaders/skybox.frag");
         this->sky_shader->Compile();
-		this->tex->LoadHDR("../../../../Render/tex/skycube.hdr");
+		this->tex->LoadHDR("../../../../Render/tex/sky2.hdr");
         this->projection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
         this->view[0] = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         this->view[1] = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));

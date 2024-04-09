@@ -30,16 +30,22 @@ namespace RR {
 		RObject* cube = new RObject();
 		cube->name = "wave";
 		Mesh* mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
-		mesh->Load("../../../../Render/mesh/wavetest.obj");
+		mesh->Load("../../../../Render/mesh/wave2.obj");
 		mesh->GPUupload();
 
 		EntityList.emplace_back(cube);
-		//RObject* cube2 = new RObject();
-		//cube2->name = "cube2";
-		//mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
-		//mesh->Load("../../../../Render/mesh/testm.obj");
-		//mesh->GPUupload();
-		//EntityList.emplace_back(cube2);
+		RObject* cube2 = new RObject();
+		cube2->name = "cube2";
+		mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
+		std::shared_ptr<Material> mat = std::make_shared<Material>();
+		cube2->MoveTo(glm::vec3(0, -5, 0));
+		mat->AddShader(std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag"));
+		mat->Setcongif(ulit);
+		mesh->setMat(mat);
+		
+		mesh->Load("../../../../Render/mesh/wave2.obj");
+		mesh->GPUupload();
+		EntityList.emplace_back(cube2);
 	}
 	std::shared_ptr<Camera> World::Maincamera() {
 		auto it = this->cameras.find("Maincamera");

@@ -13,6 +13,7 @@ uniform vec4 wavep3;
 out vec3 Fragpos;
 out vec3 Normal;
 out vec2 UV;
+out vec3 orinormal;
 vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent){
 	vec2 dir = normalize(wave.xy);
 	float  k = (2*PI)/max(1,wave.w);
@@ -23,9 +24,19 @@ vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent
 	originpos.y += amplitude*sin(x);
 	originpos.x += amplitude*cos(x) * dir.x;
 	originpos.z += amplitude*cos(x) * dir.y;
-	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x,amplitude*k*cos(x)* dir.x,0));
-	bitangent += normalize(vec3(0,amplitude*k*cos(x)* dir.y,1-amplitude*k*sin(x)* dir.y* dir.y));
+	float dy = amplitude*k*cos(x);
+	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x , dy* dir.x ,  0));
+	bitangent += normalize(vec3(0 ,  dy* dir.y  ,  1-amplitude*k*sin(x)* dir.y* dir.y));
 	return originpos;
+}
+vec3 Partical(vec3 origin,float left, float right){
+	float mid = (left + right)/2;
+	float y1 = smoothstep(left,mid,origin.x );
+	float y2 = smoothstep(mid,right,origin.z );
+	float y3 = smoothstep(left,mid,origin.z );
+	float y4 = smoothstep(mid,right,origin.z );
+	origin.y = y1 - y2;
+	return origin;
 }
 void main(){
 	vec4 position = model *vec4(Pos,1.0);
@@ -34,9 +45,12 @@ void main(){
 	vec3 Wavepos = Gerstner(wavep,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent);
-	Fragpos = Wavepos;
+	//vec3 par = Partical(position.xyz,(time*0.5),4+(time*0.5));
+	Fragpos =Wavepos;
 	UV = uvs;
 	Normal = cross(bitangent,tangent);
-	gl_Position = projection * view *  vec4(Wavepos,1.0);
+	//Normal = normal;
+	orinormal = normal;
+	gl_Position = projection * view *  vec4(Wavepos,1.0f);
 	//Normal = normal;
 }

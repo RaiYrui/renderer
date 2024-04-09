@@ -21,7 +21,7 @@ namespace RR {
                      f = GL_RGBA;
                  else
                      f = GL_RGB;
-                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->tex->width, this->tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                 glTexImage2D(GL_TEXTURE_2D, 0, f, this->tex->width, this->tex->height, 0, f, GL_UNSIGNED_BYTE, data);
                 stbi_image_free(this->data);
                 glGenerateMipmap(GL_TEXTURE_2D);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

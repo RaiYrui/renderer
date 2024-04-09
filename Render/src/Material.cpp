@@ -29,9 +29,10 @@ namespace RR {
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.7f, 1.75f);
 		this->maintex = std::make_shared<Texture>("maintex");
 		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
+		this->nst = glm::vec4(1.0f,2.0f,2.0f,0.75f);
 	}
-	void Material::AddShader(Shader* shader) {
-		this->shader = std::make_shared<Shader>(*shader);
+	void Material::AddShader(std::shared_ptr<Shader> shader) {
+		this->shader = shader;
 	}
 	std::string Material::getkey() {
 		return this->shader->Key();
@@ -104,6 +105,7 @@ namespace RR {
 		this->shader->SetVec4("wavep", this->w1);
 		this->shader->SetVec4("wavep2",this->w2);
 		this->shader->SetVec4("wavep3", this->w3);
+		this->shader->SetVec4("NST", this->nst);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, env.intvalue);
 		this->shader->SetInt("cubemap", 0);
@@ -130,5 +132,9 @@ namespace RR {
 		ImGui::DragFloat("y3 dir", &this->w3.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("amplitude3", &this->w3.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("k3", &this->w3.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("nstx", &this->nst.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("nsty", &this->nst.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("nstz", &this->nst.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("nstw", &this->nst.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 	}
 }
