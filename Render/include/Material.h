@@ -12,6 +12,7 @@ namespace RR {
 	{
 		Normal = 0,
 		ulit,
+		Pbr,
 	};
 	struct Color {
 		float r, g, b, a;
@@ -33,9 +34,11 @@ namespace RR {
 		glm::vec4 color;
 		ConfigType type;
 		void Normaluniform();
+		void Pbruniform();
 		//≤‚ ‘”√
 		glm::vec4 w1, w2, w3;
 		glm::vec4 nst;
+		float mat, rough, ao;
 	public:
 		//ÃÏø’∫–
 		static uniform_data env;

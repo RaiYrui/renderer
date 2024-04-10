@@ -5,6 +5,7 @@ uniform float Intensity[100];
 uniform vec4 color;
 uniform vec3 Campos;
 uniform int Lightnum;
+uniform vec3 Lightdir;
 uniform samplerCube cubemap;
 uniform sampler2D maintex;
 uniform float time;
@@ -30,8 +31,8 @@ vec3 getNormalFromMap()
 
     return normalize(TBN * tangentNormal);
 }
-vec3 blendNormals(vec3 n1, vec3 n2, float blendFactor) {
-    return normalize(mix(n1, n2, blendFactor));
+vec3 blendNormals(vec3 n1, vec3 n2,float factor) {
+    return normalize(mix(n1,n2,factor));
 }
 void main(){
 	//refraction
@@ -48,9 +49,10 @@ void main(){
 	//’€…‰
 	vec3 refraction = refract(-E, nmap, ratio);
 	vec4 refracolor = vec4(texture(cubemap,refraction).rgb,1.0f);
-	diffuse = vec4(mix(refracolor.rgb,diffuse.rgb,diffuse.a),1.0f);
+	diffuse.rgb = mix(refracolor.rgb,diffuse.rgb,diffuse.a);
+
 	FragColor = diffuse;
-	FragColor += (refcolor*0.1f);
+	FragColor.rgb += (refcolor.rgb*0.1f);
 	for(int i =0; i < Lightnum;++i){
 		vec3 L = normalize(Lightpos[i]-Fragpos);
 		vec3 H = normalize(L+E);
@@ -59,7 +61,7 @@ void main(){
 		fresnel = 1.0f - fresnel;
 		fresnel = pow(fresnel,6.0f);
 
-		float spec = pow(clamp(dot(nmap,H),1,0),32);
+		float spec = pow(clamp(dot(blendn,H),1,0),32);
 		vec4 specolor = spec * Lightcolor[i] * Intensity[i];
 		//specolor = mix(specolor,vec4(1.0f),fresnel);
 		FragColor += specolor;

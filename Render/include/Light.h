@@ -13,6 +13,7 @@ namespace RR {
 		float intensity;
 		static int tid;
 		int id;
+		glm::vec3 dir;
 	public:
 		//ÒÆ¶¯µÆ¹â
 		void Moveto(const glm::vec3& position);

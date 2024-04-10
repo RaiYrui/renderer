@@ -30,6 +30,9 @@ namespace RR {
 		this->maintex = std::make_shared<Texture>("maintex");
 		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
 		this->nst = glm::vec4(1.0f,2.0f,2.0f,0.75f);
+		this->mat = 1;
+		this->rough = 0.05;
+		this->ao = 0.5;
 	}
 	void Material::AddShader(std::shared_ptr<Shader> shader) {
 		this->shader = shader;
@@ -94,6 +97,9 @@ namespace RR {
 			break;
 		case ulit:
 			break;
+		case Pbr:
+			this->Pbruniform();
+			break;
 		default:
 			break;
 		}
@@ -113,6 +119,24 @@ namespace RR {
 		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
 		this->shader->SetInt("maintex", 1);
 		
+	}
+	void Material::Pbruniform() {
+		this->shader->SetVec4("color", this->color);
+		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
+		this->shader->SetFloat("time", glfwGetTime());
+		this->shader->SetVec4("wavep", this->w1);
+		this->shader->SetVec4("wavep2", this->w2);
+		this->shader->SetVec4("wavep3", this->w3);
+		this->shader->SetVec4("NST", this->nst);
+		this->shader->SetFloat("metallic", this->mat);
+		this->shader->SetFloat("roughness", this->rough);
+		this->shader->SetFloat("ao", this->ao);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, env.intvalue);
+		this->shader->SetInt("cubemap", 0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
+		this->shader->SetInt("maintex", 1);
 	}
 	void Material::Render_ui() {
 		ImGui::Text("Main Color");
@@ -136,5 +160,8 @@ namespace RR {
 		ImGui::DragFloat("nsty", &this->nst.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("nstz", &this->nst.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("nstw", &this->nst.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("mat", &this->mat, 0.05f, 0, 1, "%.3f");
+		ImGui::DragFloat("rough", &this->rough, 0.05f, 0, 1, "%.3f");
+		ImGui::DragFloat("ao", &this->ao, 0.05f, 0, 1, "%.3f");
 	}
 }
