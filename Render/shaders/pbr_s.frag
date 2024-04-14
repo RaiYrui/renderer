@@ -75,6 +75,9 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
     return ggx1 * ggx2;
 }
+float saturate(float value) {
+    return clamp(value, 0.0, 1.0);
+}
 vec3 blendNormals(vec3 n1, vec3 n2,float factor) {
     return normalize(mix(n1,n2,factor));
 }
@@ -83,24 +86,24 @@ void main(){
 	vec3 N = normalize(Normal);
     vec3 V = normalize(Campos - Fragpos);
     vec4 diffuse = color;
-    //’€…‰
+    vec3 blendn = blendNormals(nmap,orinormal,0.9f);
+     //’€…‰
     float ratio = 1.00 / 1.52;
-    vec3 refraction = refract(-V, nmap, ratio);
+    vec3 refraction = refract(-V, blendn, ratio);
 	vec4 refracolor = vec4(texture(cubemap,refraction).rgb,1.0f);
     diffuse.rgb = mix(refracolor.rgb,diffuse.rgb,diffuse.a);
 
     //∑¥…‰
-    vec3 blendn = blendNormals(nmap,N,0.5f);
+    float f = pow(1.0 - clamp(dot(blendn,V),0.0,1.0),5.0f);
 	vec3 R = reflect(-V,blendn);
 	vec4 refcolor = vec4(texture(cubemap,R).rgb,1.0f);
-    diffuse*= (refcolor);
-
+    diffuse.rgb*= (refcolor.rgb*f);
     vec3 F0 = vec3(0.04); 
     F0 = mix(F0, diffuse.rgb, metallic);
     vec3 Lo = vec3(0.0);
     for(int i = 0; i < Lightnum; ++i) 
     {
-        vec3 L = normalize(Lightpos[i] - Fragpos);
+        vec3 L = normalize(-Lightdir);
         vec3 H = normalize(V + L);
         float distance    = length(Lightpos[i] - Fragpos);
         float attenuation = 1.0 / (distance * distance);
@@ -118,13 +121,13 @@ void main(){
         float denominator = 4.0 * max(dot(blendn, V), 0.0) * max(dot(blendn, L), 0.0) + 0.001; 
         vec3 specular     = nominator / denominator;
         float NdotL = max(dot(blendn, L), 0.0);                
-        Lo += (kD * diffuse.rgb / PI + specular) * radiance * NdotL; 
+        Lo += (kD * diffuse.rgb / PI + specular) * radiance * NdotL* Intensity[i]; 
     }   
     vec3 ambient = vec3(0.03) * diffuse.rgb * ao;
     vec3 res = ambient + Lo;
-
+    float w = (Lo.r+Lo.g+Lo.b)/3;
     res = res / (res + vec3(1.0));
     res = pow(res, vec3(1.0/2.2));  
-    FragColor = vec4(res, 1.0);
+    FragColor = vec4(res, clamp(w,diffuse.a,1.0));
 
 }

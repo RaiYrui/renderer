@@ -7,11 +7,11 @@ namespace RR {
 		glGenRenderbuffers(1, &this->RBO);
 		glGenTextures(1, &this->rendertexture);
 		glBindTexture(GL_TEXTURE_2D, this->rendertexture);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1200, 900, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, this->window->width, this->window->height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindRenderbuffer(GL_RENDERBUFFER, this->RBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1200, 900);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, this->window->width, this->window->width);
 		glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->rendertexture, 0);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->RBO);

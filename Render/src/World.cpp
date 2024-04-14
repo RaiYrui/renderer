@@ -13,7 +13,7 @@ namespace RR {
 		light = std::make_shared<Light>();
 		light->Moveto(glm::vec3(2, 5, 0));
 		this->Lights.emplace_back(light);
-
+		std::stable_sort(this->EntityList.begin(), this->EntityList.end(), [](RObject* a, RObject* b) {return a->Renderqueue < b->Renderqueue; });
 		for (RObject* object : this->EntityList) {
 			object->Start();
 		}
@@ -28,6 +28,7 @@ namespace RR {
 	}
 	void World::CreateSomething() {
 		RObject* cube = new RObject();
+		cube->Renderqueue = 3000;
 		cube->name = "wave";
 		Mesh* mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
 		mesh->Load("../../../../Render/mesh/wave2.obj");
@@ -38,12 +39,14 @@ namespace RR {
 		cube2->name = "cube2";
 		mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
 		std::shared_ptr<Material> mat = std::make_shared<Material>();
-		cube2->MoveTo(glm::vec3(0, -5, 0));
+		cube2->MoveTo(glm::vec3(0, -4.5f, 0));
+		cube2->ScaleTo(glm::vec3(1.5f, 1.0f, 1.9f));
 		mat->AddShader(std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag"));
 		mat->Setcongif(ulit);
+		mat->setTex("../../../../Render/tex/lw.jpg");
 		mesh->setMat(mat);
 		
-		mesh->Load("../../../../Render/mesh/wave2.obj");
+		mesh->Load("../../../../Render/mesh/pool.obj");
 		mesh->GPUupload();
 		EntityList.emplace_back(cube2);
 	}

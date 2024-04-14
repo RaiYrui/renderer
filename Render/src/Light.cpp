@@ -3,7 +3,7 @@ namespace RR {
 	int Light::tid = 0;
 	Light::Light() {
 		this->color = glm::vec4(2.0f,2.0f,1.8f,1.0f);
-		this->intensity = 1.0f;
+		this->intensity = 5.0f;
 		this->transform = std::make_shared<Transform>();
 		this->id = this->tid;
 		Mesh::global_uniform["Lightpos[" + std::to_string(this->id) + "]"] = std::make_shared<Uniform>(Vec3, glm::vec3());
@@ -20,7 +20,7 @@ namespace RR {
 			num /= 10;
 		}
 		this->name = "Light" + c;
-		this->dir = glm::vec3(0, -1, -1);
+		this->dir = glm::vec3(0, -0.25, -1);
 	}
 	void Light::Moveto(const glm::vec3& position) {
 		this->transform->Translate(position);

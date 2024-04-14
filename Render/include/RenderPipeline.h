@@ -2,6 +2,7 @@
 #include"Render.h"
 #include"Skybox.h"
 #include"hdr.h"
+#include"bloom.h"
 #include"Window.h"
 namespace RR {
 	/// <summary>
@@ -22,7 +23,6 @@ namespace RR {
 		void Postprocess();
 		Window* window;
 	public:
-		static int glw, glh;
 		//需要配置定制化的材质
 		RenderPipeline();
 		void Init(std::vector<RObject*>& entitylist);

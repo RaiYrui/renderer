@@ -13,6 +13,18 @@ namespace RR {
 		this->model = std::make_shared<Uniform>(Mat4, glm::mat4(1.0f));
 		Mesh::global_uniform["model"] = this->model;
 	}
+	Transform::Transform(const Transform& tr) {
+		this->pos =tr.pos;
+		this->localPosition = tr.localPosition;
+		this->localRotation = tr.localRotation;
+		this->localScale =tr.localScale;
+		this->translation_mat = tr.translation_mat;
+		this->rotation_mat =tr.rotation_mat;
+		this->scale_mat = tr.scale_mat;
+		this->up = tr.up;
+		this->eu_angle = tr.eu_angle;
+		this->model = std::make_shared<Uniform>(*tr.model.get());
+	}
 	glm::vec3 Transform::Position() {
 		return this->localPosition;
 	}

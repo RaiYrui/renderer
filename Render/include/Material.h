@@ -35,6 +35,7 @@ namespace RR {
 		ConfigType type;
 		void Normaluniform();
 		void Pbruniform();
+		void ulituniform();
 		//测试用
 		glm::vec4 w1, w2, w3;
 		glm::vec4 nst;
@@ -52,6 +53,8 @@ namespace RR {
 		//需要定制化的uniform设置
 		void Setcongif(const ConfigType& type);
 		void renderConfig();
+		void setTex(const char* path);
 		Material();
+		Material(const Material& mat);
 	};
 }

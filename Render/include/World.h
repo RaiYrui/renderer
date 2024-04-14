@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<algorithm>
 #include "RObject.h"
 #include"Resources.h"
 #include "RenderPipeline.h"

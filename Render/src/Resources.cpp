@@ -1,10 +1,25 @@
 #include"Resources.h"
 namespace RR {
     //---------------------------Texture---------------------------------
+    TextureInfo::TextureInfo(const TextureInfo& tf) {
+        this->id = tf.id;
+        this->height = tf.height;
+        this->name = tf.name;
+        this->width = tf.width;
+        this->path = tf.path;
+    }
+    TextureInfo::TextureInfo() {
+
+    }
     Texture::Texture(std::string name) {
         tex = std::make_shared<TextureInfo>();
         this->tex->name = name;
         glGenTextures(1, &this->tex->id);
+    }
+    Texture::Texture(const Texture& tex) {
+        this->tex = std::make_shared<TextureInfo>(*tex.tex.get());
+        this->type = tex.type;
+        this->format = tex.format;
     }
     bool Texture::LoadTexture(const char* path) {
         stbi_set_flip_vertically_on_load(false);

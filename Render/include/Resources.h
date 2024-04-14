@@ -35,6 +35,8 @@ namespace RR {
 		int height = 0;
 		char* path = (char*)"";
 		std::string name;
+		TextureInfo();
+		TextureInfo(const TextureInfo& tf);
 	};
 	/// <summary>
 	/// Ã˘Õº¿‡
@@ -48,6 +50,7 @@ namespace RR {
 		int format;
 	public:
 		Texture(std::string name = "");
+		Texture(const Texture& tex);
 		bool LoadTexture(const char* path);
 		bool LoadHDR(const char* path);
 		void Setname(std::string n);

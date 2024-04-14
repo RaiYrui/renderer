@@ -23,16 +23,32 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.055f, 0.165f, 0.24f, 1.0f);
-		this->w1 = glm::vec4(3.5f, 3.0f, 0.8f, 3.0f);
-		this->w2 = glm::vec4(-0.25f, -0.75f, 0.75f, 2.25f);
-		this->w3 = glm::vec4(6.0f, -6.0f, 0.7f, 1.75f);
+		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 1.0f);
+		this->w1 = glm::vec4(3.5f, 3.0f, 0.25f, 3.0f);
+		this->w2 = glm::vec4(-0.25f, -0.75f, 0.3f, 2.25f);
+		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
 		this->maintex = std::make_shared<Texture>("maintex");
 		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
 		this->nst = glm::vec4(1.0f,2.0f,2.0f,0.75f);
 		this->mat = 1;
 		this->rough = 0.05;
-		this->ao = 0.5;
+		this->ao = 1;
+	}
+	Material::Material(const Material& mat) {
+		this->type = mat.type;
+		this->color =mat.color;
+		this->w1 = mat.w1;
+		this->w2 = mat.w2;
+		this->w3 = mat.w3;
+		this->maintex = std::make_shared<Texture>(*mat.maintex.get());
+		this->shader = mat.shader;
+		this->nst = mat.nst;
+		this->mat = mat.mat;
+		this->rough = mat.rough;
+		this->ao = mat.ao;
+	}
+	void Material::setTex(const char* path) {
+		this->maintex->LoadTexture(path);
 	}
 	void Material::AddShader(std::shared_ptr<Shader> shader) {
 		this->shader = shader;
@@ -96,6 +112,7 @@ namespace RR {
 			this->Normaluniform();
 			break;
 		case ulit:
+			this->ulituniform();
 			break;
 		case Pbr:
 			this->Pbruniform();
@@ -107,7 +124,7 @@ namespace RR {
 	void Material::Normaluniform() {
 		this->shader->SetVec4("color", this->color);
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
-		this->shader->SetFloat("time", glfwGetTime());
+		this->shader->SetFloat("time", glfwGetTime()*0.5f);
 		this->shader->SetVec4("wavep", this->w1);
 		this->shader->SetVec4("wavep2",this->w2);
 		this->shader->SetVec4("wavep3", this->w3);
@@ -123,7 +140,7 @@ namespace RR {
 	void Material::Pbruniform() {
 		this->shader->SetVec4("color", this->color);
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
-		this->shader->SetFloat("time", glfwGetTime());
+		this->shader->SetFloat("time", glfwGetTime() * 0.5f);
 		this->shader->SetVec4("wavep", this->w1);
 		this->shader->SetVec4("wavep2", this->w2);
 		this->shader->SetVec4("wavep3", this->w3);
@@ -137,6 +154,12 @@ namespace RR {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
 		this->shader->SetInt("maintex", 1);
+	}
+	void Material::ulituniform() {
+		this->shader->SetVec4("color", this->color);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
+		this->shader->SetInt("maintex", 0);
 	}
 	void Material::Render_ui() {
 		ImGui::Text("Main Color");

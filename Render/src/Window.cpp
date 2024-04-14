@@ -48,6 +48,9 @@ namespace RR {
     void Window::setview() {
         glViewport(this->window->H_width, this->window->height - this->window->gl_height, this->window->gl_width, this->window->gl_height);
     }
+    void Window::setpreview() {
+        glViewport(0, 0, this->width, this->height);
+    }
     void Window::Resize() {
         this->gl_width = this->width / 2;
         this->gl_height = this->height * 2 / 3;

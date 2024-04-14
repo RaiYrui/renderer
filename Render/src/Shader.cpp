@@ -76,10 +76,10 @@ namespace RR {
         if (!success)
         {
             glGetProgramInfoLog(ID, 1024, NULL, infoLog);
-            std::cout << " SHADER COMPILE ERROR " << infoLog << std::endl;
+            std::cout << this->name<<" SHADER COMPILE ERROR " << infoLog << std::endl;
         }
         else {
-            std::cout << "SHADER COMPILE COMPLETE" << std::endl;
+            std::cout<<this->name << "SHADER COMPILE COMPLETE" << std::endl;
         }
         glDeleteShader(vertex);
         glDeleteShader(fragment);

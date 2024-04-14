@@ -29,13 +29,25 @@ vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent
 	bitangent += normalize(vec3(0 ,  dy* dir.y  ,  1-amplitude*k*sin(x)* dir.y* dir.y));
 	return originpos;
 }
-vec3 Partical(vec3 origin,float left, float right){
+float customRect(float x) {
+	x = abs(x);
+	if(x < 0.5f)
+		return 1;
+	else if(x == 0.5f)
+		return 0.5f;
+	return 0;
+}
+vec3 Partical(vec3 origin,float left,float right){
+	//float  k = (2*PI)/max(1,wave.w);
+	//origin.y += (cos((2*PI)*(origin.x+time)/5)) * customRect((origin.x+time)/5)*(cos((2*PI)*(origin.z+time)/5))* customRect((origin.z+time)/5);
+	//float x = dot(dir,originpos.xz);
 	float mid = (left + right)/2;
 	float y1 = smoothstep(left,mid,origin.x );
-	float y2 = smoothstep(mid,right,origin.z );
+	float y2 = smoothstep(mid,right,origin.x );
 	float y3 = smoothstep(left,mid,origin.z );
 	float y4 = smoothstep(mid,right,origin.z );
-	origin.y = y1 - y2;
+	origin.y +=(y1-y2)*(y3-y4);
+
 	return origin;
 }
 void main(){
@@ -45,7 +57,7 @@ void main(){
 	vec3 Wavepos = Gerstner(wavep,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent);
-	//vec3 par = Partical(position.xyz,(time*0.5),4+(time*0.5));
+	//vec3 Wavepos = Partical(position.xyz,(time*0.5),4+(time*0.5));
 	Fragpos =Wavepos;
 	UV = uvs;
 	Normal = cross(bitangent,tangent);
@@ -54,3 +66,7 @@ void main(){
 	gl_Position = projection * view *  vec4(Wavepos,1.0f);
 	//Normal = normal;
 }
+//	float mid = (left + right)/2;
+//float y1 = smoothstep(left,mid,origin.x );
+//float y2 = smoothstep(mid,right,origin.z );
+//origin.y = y1 - y2;

@@ -8,6 +8,7 @@ namespace RR {
     void Mesh::setGlobaluniform() {
         for (std::pair<std::string,std::shared_ptr<Uniform>> it : this->global_uniform) {
             this->material->setUniform(it.first, it.second->type, it.second->data);
+            //std::cout << it.first << it.second->data.Vec3.y << std::endl;
         }
         this->material->renderConfig();
     }
@@ -28,6 +29,16 @@ namespace RR {
     Mesh::Mesh() {
         this->name = "Mesh";
         mesh_data = std::make_shared<MeshItem>();
+    }
+    Mesh::Mesh(const Mesh& mesh) {
+        this->name = mesh.name;
+        this->mesh_data = std::make_shared<MeshItem>(*mesh.mesh_data.get());
+        this->vao = mesh.vao;
+        this->vertexbuffer = mesh.vertexbuffer;
+        this->uvbuffer = mesh.uvbuffer;
+        this->normalbuffer = mesh.normalbuffer;
+        this->drawsize = mesh.drawsize;
+        this->material = std::make_shared<Material>(*mesh.material.get());
     }
     void Mesh::GPUupload() {
         if (vaomap.find(this->entity->name) != vaomap.end()) {

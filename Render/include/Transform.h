@@ -26,6 +26,7 @@ namespace RR {
 		void Destroy()override;
 		void Inspector_dis()override;
 		Transform();
+		Transform(const Transform& tr);
 		void Translate(const glm::vec3& position);
 		void Rotate(const glm::vec3& axis,const float& angle);
 		void Scale(const glm::vec3& scale);

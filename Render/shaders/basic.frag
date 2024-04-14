@@ -47,14 +47,15 @@ void main(){
 	vec3 R = reflect(-E,blendn);
 	vec4 refcolor = vec4(texture(cubemap,R).rgb,1.0f);
 	//’€…‰
-	vec3 refraction = refract(-E, nmap, ratio);
+	vec3 refraction = refract(-E, n, ratio);
 	vec4 refracolor = vec4(texture(cubemap,refraction).rgb,1.0f);
 	diffuse.rgb = mix(refracolor.rgb,diffuse.rgb,diffuse.a);
+	diffuse.a = 1.0f;
 
 	FragColor = diffuse;
 	FragColor.rgb += (refcolor.rgb*0.1f);
 	for(int i =0; i < Lightnum;++i){
-		vec3 L = normalize(Lightpos[i]-Fragpos);
+		vec3 L = normalize(-Lightdir);
 		vec3 H = normalize(L+E);
 		float fresnel = dot(H,E);
 		fresnel = max(fresnel,0.0f);

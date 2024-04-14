@@ -22,6 +22,7 @@ namespace RR {
 		int H_width, H_height;
 		static Window* getInstance();
 		void setview();
+		void setpreview();
 		bool Init();
 		void Resize();
 		static GLFWwindow* glfw_window;

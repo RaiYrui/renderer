@@ -44,10 +44,14 @@ namespace RR {
 			num /= 10;
 		}
 		this->name = "ÎïÌå" + c;
+		this->Renderqueue = 2000;
 		this->transform = std::dynamic_pointer_cast<Transform>(std::shared_ptr<Component>(this->AddComponent("Transform")));
 	}
 	void RObject::MoveTo(const glm::vec3& pos) {
 		this->transform->Translate(pos);
+	}
+	void RObject::ScaleTo(const glm::vec3& scale) {
+		this->transform->Scale(scale);
 	}
 	RObject::~RObject() {
 		for (std::pair<std::string,Component*> it : this->components) {

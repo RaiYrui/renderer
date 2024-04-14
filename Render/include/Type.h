@@ -29,6 +29,10 @@ namespace RR {
 	struct Uniform {
 		Uniformv type;
 		uniform_data data;
+		Uniform(const Uniform& uni) {
+			this->type = uni.type;
+			this->data = uni.data;
+		}
 		Uniform(const Uniformv& t, const uniform_data& d) {
 			this->type = t;
 			this->data = d;

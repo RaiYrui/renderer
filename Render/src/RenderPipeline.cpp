@@ -1,7 +1,5 @@
 #include "RenderPipeline.h"
 namespace RR {
-	int RenderPipeline::glw;
-	int RenderPipeline::glh;
 	RenderPipeline::RenderPipeline() {
 		glEnable(GL_DEPTH_TEST);
 		this->render = std::make_unique<Render>();
@@ -14,6 +12,7 @@ namespace RR {
 		this->skybox->Rendercube();
 		this->setquad();
 		//后处理添加
+		this->Ps.emplace_back(std::make_shared<Bloompost>());
 		this->Ps.emplace_back(std::make_shared<HDRpost>());//HDR
 		glGenFramebuffers(1, &this->FBO);
 		glGenRenderbuffers(1, &this->RBO);
@@ -29,11 +28,11 @@ namespace RR {
 		}
 		glGenTextures(1, &this->SRC);
 		glBindTexture(GL_TEXTURE_2D, this->SRC);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1200, 900, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, this->window->width, this->window->height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindRenderbuffer(GL_RENDERBUFFER, this->RBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1200, 900);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, this->window->width, this->window->height);
 		glBindFramebuffer(GL_FRAMEBUFFER, this->FBO);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->SRC, 0);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->RBO);
