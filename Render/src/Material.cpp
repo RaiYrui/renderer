@@ -23,7 +23,7 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 1.0f);
+		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 0.976f);
 		this->w1 = glm::vec4(3.5f, 3.0f, 0.25f, 3.0f);
 		this->w2 = glm::vec4(-0.25f, -0.75f, 0.3f, 2.25f);
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
@@ -33,6 +33,7 @@ namespace RR {
 		this->mat = 1;
 		this->rough = 0.05;
 		this->ao = 1;
+		this->shader = std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag");
 	}
 	Material::Material(const Material& mat) {
 		this->type = mat.type;

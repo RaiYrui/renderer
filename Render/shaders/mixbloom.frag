@@ -6,4 +6,5 @@ uniform sampler2D blur;
 
 void main(){
 	FragColor = vec4(texture(origin,UV).rgb+texture(blur,UV).rgb,1.0f);
+	//FragColor = texture(origin,UV);
 }

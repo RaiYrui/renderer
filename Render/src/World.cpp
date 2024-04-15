@@ -35,6 +35,10 @@ namespace RR {
 		mesh->GPUupload();
 
 		EntityList.emplace_back(cube);
+		RObject* copy = new RObject(*cube);
+		copy->MoveTo(glm::vec3(5, 0, 0));
+		EntityList.emplace_back(copy);
+
 		RObject* cube2 = new RObject();
 		cube2->name = "cube2";
 		mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));

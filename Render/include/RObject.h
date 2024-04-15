@@ -16,6 +16,7 @@ namespace RR {
 	public:
 		int Renderqueue;
 		RObject();
+		RObject(const RObject& ro);
 		//Ìí¼Ó×é¼þ
 		Component* AddComponent(const std::string& name);
 		Component* GetComponent(const std::string& name);

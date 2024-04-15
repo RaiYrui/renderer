@@ -46,8 +46,7 @@ vec3 Partical(vec3 origin,float left,float right){
 	float y2 = smoothstep(mid,right,origin.x );
 	float y3 = smoothstep(left,mid,origin.z );
 	float y4 = smoothstep(mid,right,origin.z );
-	origin.y +=(y1-y2)*(y3-y4);
-
+	origin.y +=(y1-y2)*(y3-y4)*0.6f;
 	return origin;
 }
 void main(){
@@ -57,7 +56,7 @@ void main(){
 	vec3 Wavepos = Gerstner(wavep,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent);
-	//vec3 Wavepos = Partical(position.xyz,(time*0.5),4+(time*0.5));
+	//vec3 Wavepos = Partical(position.xyz,(time*0.5),2+(time*0.5));
 	Fragpos =Wavepos;
 	UV = uvs;
 	Normal = cross(bitangent,tangent);

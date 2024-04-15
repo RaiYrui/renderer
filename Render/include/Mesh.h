@@ -24,6 +24,7 @@ namespace RR {
 		static std::unordered_map<std::string, std::shared_ptr<Uniform>>global_uniform;
 		Mesh();
 		Mesh(const Mesh& mesh);
+		Component* copy()override;
 		void Load(const char* path);
 		void Start()override;
 		void Update()override;

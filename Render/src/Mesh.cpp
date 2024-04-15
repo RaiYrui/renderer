@@ -29,6 +29,7 @@ namespace RR {
     Mesh::Mesh() {
         this->name = "Mesh";
         mesh_data = std::make_shared<MeshItem>();
+        this->material = std::make_shared<Material>();
     }
     Mesh::Mesh(const Mesh& mesh) {
         this->name = mesh.name;
@@ -39,6 +40,10 @@ namespace RR {
         this->normalbuffer = mesh.normalbuffer;
         this->drawsize = mesh.drawsize;
         this->material = std::make_shared<Material>(*mesh.material.get());
+    }
+    Component* Mesh::copy() {
+        Mesh* temp = new Mesh(*this);
+        return temp;
     }
     void Mesh::GPUupload() {
         if (vaomap.find(this->entity->name) != vaomap.end()) {
@@ -86,5 +91,7 @@ namespace RR {
         this->material = mat;
     }
     Mesh::~Mesh() {
+        delete this->entity;
+        this->entity = nullptr;
     }
 }

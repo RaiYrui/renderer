@@ -22,9 +22,15 @@ namespace RR {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, this->rendertexture[i], 0);
-            //this->attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-            glDrawBuffers(2, this->attachments);
+        }
+        glGenRenderbuffers(1, &this->RBO);
+        glBindRenderbuffer(GL_RENDERBUFFER, this->RBO);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, this->window->width, this->window->height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->RBO);
+        GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+        glDrawBuffers(2, attachments);
 
+        for (int i = 0; i < 2; ++i) {
             glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
             glBindTexture(GL_TEXTURE_2D, pingpongBuffer[i]);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, this->window->width, this->window->height, 0, GL_RGB, GL_FLOAT, NULL);
@@ -76,7 +82,6 @@ namespace RR {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, src);
         this->input_sh->SetInt("src", 0);
-        glDrawBuffers(2, this->attachments);
         this->renderquad();
 
         GLboolean horizontal = true, first_iteration = true;

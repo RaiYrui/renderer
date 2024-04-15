@@ -25,6 +25,10 @@ namespace RR {
 		this->eu_angle = tr.eu_angle;
 		this->model = std::make_shared<Uniform>(*tr.model.get());
 	}
+	Component* Transform::copy() {
+		Transform* temp = new Transform(*this);
+		return temp;
+	}
 	glm::vec3 Transform::Position() {
 		return this->localPosition;
 	}
@@ -86,6 +90,7 @@ namespace RR {
 		return glm::normalize(this->localRotation * glm::vec4(glm::vec3(0, 0, 1), 0.0f));
 	}
 	Transform::~Transform() {
-
+		delete this->entity;
+		this->entity = nullptr;
 	}
 }

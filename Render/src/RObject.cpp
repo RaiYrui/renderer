@@ -5,7 +5,7 @@ namespace RR {
 		auto it = components.find(name);
 		if (it == components.end()) {
 			components[name] = (Component*)CreateClass(name);
-			components[name]->entity = std::make_shared<RObject>(*this);
+			components[name]->entity = this;
 			components[name]->name += (" of " + this->name);
 			components[name]->Start();
 			return components[name];
@@ -45,6 +45,15 @@ namespace RR {
 		}
 		this->name = "ÎïÌå" + c;
 		this->Renderqueue = 2000;
+		this->transform = std::dynamic_pointer_cast<Transform>(std::shared_ptr<Component>(this->AddComponent("Transform")));
+	}
+	RObject::RObject(const RObject& ro) {
+		this->count++;
+		this->name = ro.name + "clone";
+		this->Renderqueue = ro.Renderqueue;
+		for (std::pair<std::string,Component*> com : ro.components) {
+			this->components[com.first] = com.second->copy();
+		}
 		this->transform = std::dynamic_pointer_cast<Transform>(std::shared_ptr<Component>(this->AddComponent("Transform")));
 	}
 	void RObject::MoveTo(const glm::vec3& pos) {

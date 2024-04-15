@@ -11,7 +11,8 @@ namespace RR {
 	private:
 	public:
 		std::string name;
-		std::shared_ptr<Object> entity;
+		Object* entity;
+		virtual Component* copy() = 0;
 		virtual void Start() = 0;
 		virtual void Update() = 0;
 		virtual void Destroy() = 0;
