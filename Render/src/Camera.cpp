@@ -4,7 +4,7 @@ namespace RR {
 		this->transform = std::make_shared<Transform>();
 		this->transform->Translate(glm::vec3(5.0f, 3.0f, -22.0f));
 		this->transform->Rotate(glm::vec3(0, 1, 0), -20);
-		this->Setpers(45.0f, 1200, 900, 0.1f, 100.0f);
+		this->Setpers(45.0f, 1200, 900, 0.1f, 1000.0f);
 		this->view = std::make_shared<Uniform>(Mat4, glm::lookAt(this->transform->Position(), this->front, glm::vec3(0, 1, 0)));
 		this->projecton = std::make_shared<Uniform>(Mat4, glm::mat4(1.0f));
 		this->Changetype(Perspective);

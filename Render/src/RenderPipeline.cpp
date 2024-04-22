@@ -20,8 +20,8 @@ namespace RR {
 	}
 	void RenderPipeline::Init(std::vector<RObject*>& entitylist) {
 		for (RObject* object : entitylist) {
-			if (object->name == "cube2")
-				continue;
+			/*if (object->name == "cube2"||object->name == "head")
+				continue;*/
 			Mesh* mesh = dynamic_cast<Mesh*>(object->GetComponent("Mesh"));
 			if (mesh)
 				mesh->setMat(this->mat);

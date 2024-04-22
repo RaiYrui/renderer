@@ -29,11 +29,23 @@ namespace RR {
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
 		this->maintex = std::make_shared<Texture>("maintex");
 		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
+		this->flowmap = std::make_shared<Texture>("flowmap");
+		this->flowmap->LoadTexture("../../../../Render/tex/flown.png");
 		this->nst = glm::vec4(1.0f,2.0f,2.0f,0.75f);
 		this->mat = 1;
-		this->rough = 0.05;
+		this->rough = 0.08;
 		this->ao = 1;
 		this->shader = std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag");
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_real_distribution<float> dis(0.0f,1.0f);
+		std::uniform_real_distribution<float> dis2(-20.0f, 20.0f);
+		for (int i = 0; i < 50; ++i) {
+			this->psam[i].x = dis(gen);
+			this->psam[i].y = dis(gen);
+			this->particle[i].x = dis2(gen);
+			this->particle[i].y = dis2(gen);
+		}
 	}
 	Material::Material(const Material& mat) {
 		this->type = mat.type;
@@ -42,6 +54,7 @@ namespace RR {
 		this->w2 = mat.w2;
 		this->w3 = mat.w3;
 		this->maintex = std::make_shared<Texture>(*mat.maintex.get());
+		this->flowmap = std::make_shared<Texture>(*mat.flowmap.get());
 		this->shader = mat.shader;
 		this->nst = mat.nst;
 		this->mat = mat.mat;
@@ -50,6 +63,9 @@ namespace RR {
 	}
 	void Material::setTex(const char* path) {
 		this->maintex->LoadTexture(path);
+	}
+	void Material::setColor(const glm::vec4& c) {
+		this->color = c;
 	}
 	void Material::AddShader(std::shared_ptr<Shader> shader) {
 		this->shader = shader;
@@ -149,12 +165,20 @@ namespace RR {
 		this->shader->SetFloat("metallic", this->mat);
 		this->shader->SetFloat("roughness", this->rough);
 		this->shader->SetFloat("ao", this->ao);
+		this->shader->SetInt("particlenum", 50);
+		for (int i = 0; i < 50; ++i) {
+			this->shader->SetVec2("dir[" + std::to_string(i) + "]", this->psam[i]);
+			this->shader->SetVec2("pivot[" + std::to_string(i) + "]", this->particle[i]);
+		}
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, env.intvalue);
 		this->shader->SetInt("cubemap", 0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, this->maintex->Getinfo()->id);
 		this->shader->SetInt("maintex", 1);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, this->flowmap->Getinfo()->id);
+		this->shader->SetInt("flowmap", 2);
 	}
 	void Material::ulituniform() {
 		this->shader->SetVec4("color", this->color);

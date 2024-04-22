@@ -48,8 +48,8 @@ namespace RR {
 		this->transform->Inspector_dis();
 		ImGui::DragFloat("Intensity", &this->intensity, 0.25f, 0, FLT_MAX, "%.3f");
 		ImGui::ColorEdit4("set color", (float*)&this->color);
-		ImGui::DragFloat("dir x", &this->dir.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
-		ImGui::DragFloat("dir y", &this->dir.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
-		ImGui::DragFloat("dir z", &this->dir.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("dir x", &this->dir.x, 0.05f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("dir y", &this->dir.y, 0.05f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("dir z", &this->dir.z, 0.05f, -FLT_MAX, FLT_MAX, "%.3f");
 	}
 }

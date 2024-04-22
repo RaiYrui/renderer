@@ -3,6 +3,7 @@
 #include<unordered_map>
 #include<memory>
 #include<IMGUI/imgui.h>
+#include <random>
 #include "Shader.h"
 #include "Resources.h"
 #include "Type.h"
@@ -30,6 +31,7 @@ namespace RR {
 		static std::unordered_map<std::string, GLuint> shadermap;
 		std::unordered_map<std::string, std::shared_ptr<Uniform>> uniform_map;
 		std::shared_ptr<Texture> maintex;
+		std::shared_ptr<Texture> flowmap;
 		std::shared_ptr<Shader> shader;
 		glm::vec4 color;
 		ConfigType type;
@@ -40,6 +42,8 @@ namespace RR {
 		glm::vec4 w1, w2, w3;
 		glm::vec4 nst;
 		float mat, rough, ao;
+		glm::vec2 particle[50];
+		glm::vec2 psam[50];
 	public:
 		//天空盒
 		static uniform_data env;
@@ -49,6 +53,7 @@ namespace RR {
 		void AddShader(std::shared_ptr<Shader> shader);
 		void RemoveShader();
 		void setUniform(const std::string& name, Uniformv type, uniform_data value);
+		void setColor(const glm::vec4& c);
 		std::string getkey();
 		//需要定制化的uniform设置
 		void Setcongif(const ConfigType& type);

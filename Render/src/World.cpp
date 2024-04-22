@@ -27,32 +27,62 @@ namespace RR {
 		this->rp->Start(this->EntityList);
 	}
 	void World::CreateSomething() {
+		Mesh* mesh;
 		RObject* cube = new RObject();
 		cube->Renderqueue = 3000;
 		cube->name = "wave";
-		Mesh* mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
-		mesh->Load("../../../../Render/mesh/wave2.obj");
+		mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
+		mesh->Load("../../../../Render/mesh/waves.obj");
 		mesh->GPUupload();
 
 		EntityList.emplace_back(cube);
-		RObject* copy = new RObject(*cube);
-		copy->MoveTo(glm::vec3(5, 0, 0));
-		EntityList.emplace_back(copy);
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				if (i == j&&i == 0)
+					continue;
+			RObject* copy = new RObject(*cube);
+			copy->MoveTo(glm::vec3(10*i, 0, 10*j));
+			EntityList.emplace_back(copy);
+			if (i == 0)
+				continue;
+			copy = new RObject(*cube);
+			copy->MoveTo(glm::vec3(-10 * i, 0, 10 * j));
+			EntityList.emplace_back(copy);
 
+			}
+		}
+		/*
 		RObject* cube2 = new RObject();
 		cube2->name = "cube2";
+		cube2->Renderqueue = 3000;
 		mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
 		std::shared_ptr<Material> mat = std::make_shared<Material>();
-		cube2->MoveTo(glm::vec3(0, -4.5f, 0));
-		cube2->ScaleTo(glm::vec3(1.5f, 1.0f, 1.9f));
+		cube2->MoveTo(glm::vec3(5, -5.5f, -15));
+		cube2->ScaleTo(glm::vec3(10, 10.0f, 10.0f));
 		mat->AddShader(std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag"));
 		mat->Setcongif(ulit);
-		mat->setTex("../../../../Render/tex/lw.jpg");
+		mat->setColor(glm::vec4(0.18,0.09,0.05,1));
+		mat->setTex("../../../../Render/tex/nt.png");
 		mesh->setMat(mat);
 		
-		mesh->Load("../../../../Render/mesh/pool.obj");
+		mesh->Load("../../../../Render/mesh/hair.obj");
 		mesh->GPUupload();
 		EntityList.emplace_back(cube2);
+
+		RObject* head = new RObject();
+		head->name = "head";
+		mesh = dynamic_cast<Mesh*>(head->AddComponent("Mesh"));
+		mat = std::make_shared<Material>();
+		head->MoveTo(glm::vec3(5, -5.5f, -15));
+		head->ScaleTo(glm::vec3(10, 10.0f, 10.0f));
+		mat->AddShader(std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/nc.frag"));
+		mat->Setcongif(ulit);
+		mat->setColor(glm::vec4(1,1,1, 1));
+		mesh->setMat(mat);
+		mesh->Load("../../../../Render/mesh/head.obj");
+		mesh->GPUupload();
+		EntityList.emplace_back(head);
+		*/
 	}
 	std::shared_ptr<Camera> World::Maincamera() {
 		auto it = this->cameras.find("Maincamera");
