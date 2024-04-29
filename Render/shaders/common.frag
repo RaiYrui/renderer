@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 in vec3 Fragpos;
 in vec2 UV;
 in vec3 Normal;

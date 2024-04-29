@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 uniform vec3 Lightpos[100];
 uniform vec4 Lightcolor[100];
 uniform float Intensity[100];

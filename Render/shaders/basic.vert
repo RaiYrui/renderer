@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 layout(location = 0) in vec3 Pos;
 layout(location = 1) in vec2 uvs;
 layout(location = 2) in vec3 normal;
@@ -18,6 +18,7 @@ out vec3 Fragpos;
 out vec3 Normal;
 out vec2 UV;
 out vec3 orinormal;
+out vec4 cpos;
 
 const vec2 ranpos = vec2(0.5,0.5);
 vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent){
@@ -82,6 +83,7 @@ void main(){
 	//Normal = normal;
 	orinormal = normal;
 	gl_Position = projection * view*  vec4(Wavepos,1.0f);
+	cpos = gl_Position;
 	//Normal = normal;
 }
 //	float mid = (left + right)/2;

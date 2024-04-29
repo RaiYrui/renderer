@@ -4,6 +4,7 @@
 #include"hdr.h"
 #include"bloom.h"
 #include"Window.h"
+#include"ComputeShader.h"
 namespace RR {
 	/// <summary>
 	/// 渲染管线
@@ -22,6 +23,17 @@ namespace RR {
 		void Renderquad();
 		void Postprocess();
 		Window* window;
+
+		std::shared_ptr<ComputeShader> lut;
+		std::shared_ptr<ComputeShader> computetest;
+		unsigned int size;
+		unsigned int luttex;
+		unsigned int texture;
+		unsigned int xdis;
+		unsigned int ydis;
+		unsigned int stagenum;
+		//测试
+		void testGenTextures();
 	public:
 		//需要配置定制化的材质
 		RenderPipeline();

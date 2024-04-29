@@ -1,0 +1,131 @@
+#version 430 core
+
+layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+
+layout(rgba32f, binding = 0) uniform image2D output_img;
+layout(rgba32f, binding = 1) uniform image2D output_disx;
+layout(rgba32f, binding = 2) uniform image2D output_disy;
+layout (location = 0) uniform float time;
+layout (location = 1) uniform vec2 wind;
+layout (location = 2) uniform float A;
+const float PI = 3.14159265358979323846;
+const float g = 9.8f;
+//复数乘法
+vec2 cmul(vec2 c1, vec2 c2){
+    return vec2(c1.x * c2.x - c1.y*c2.y , c1.x * c2.y + c1.y * c2.x);
+}
+float dispersion(vec2 k){
+    return sqrt(length(k)*g);
+}
+float atan2(float y, float x) {
+    if (x > 0.0)
+        return atan(y / x);
+    else if (x < 0.0 && y >= 0.0)
+        return atan(y / x) + 3.1415926535897932384626433832795;
+    else if (x < 0.0 && y < 0.0)
+        return atan(y / x) - 3.1415926535897932384626433832795;
+    else if (x == 0.0 && y > 0.0)
+        return 1.5707963267948966192313216916398;
+    else if (x == 0.0 && y < 0.0)
+        return -1.5707963267948966192313216916398;
+    else
+        return 0.0;
+}
+//随机种子
+uint wangHash(uint seed)
+{
+    seed = (seed ^ 61) ^ (seed >> 16);
+    seed *= 9;
+    seed = seed ^ (seed >> 4);
+    seed *= 0x27d4eb2d;
+    seed = seed ^ (seed >> 15);
+    return seed;
+}
+//计算均匀分布随机数[0,1)
+float rand(inout uint seed)
+{
+    // Xorshift算法
+    seed ^= (seed << 13);
+    seed ^= (seed >> 17);
+    seed ^= (seed << 5);
+    return seed / 4294967296.0f;;
+}
+ vec2 NDrand(){
+	uint seed = wangHash(gl_GlobalInvocationID.y*gl_NumWorkGroups.x+gl_GlobalInvocationID.x);
+    float e1 = rand(seed);
+    float e2 = rand(seed);
+
+    e1 = max(1e-6f,e1);
+    e2 = max(1e-6f,e2);
+
+    float x = sqrt(-2.0f * log(e1)) * cos(2 * PI * e2);
+    float y = sqrt(-2.0f * log(e1)) * sin(2 * PI * e2);
+    return vec2(x,y);
+ }
+ float origindir(vec2 k, vec2 w){
+    float d = dot(k,w);
+    return d * d;
+ }
+float DonelanBannerDirectionalSpreading(vec2 k)
+{
+    float betaS;
+    float omegap = 0.855f * g / length(wind);
+    float ratio = dispersion(k) / omegap;
+
+    if (ratio < 0.95f)
+    {
+        betaS = 2.61f * pow(ratio, 1.3f);
+    }
+    if (ratio >= 0.95f && ratio < 1.6f)
+    {
+        betaS = 2.28f * pow(ratio, -1.3f);
+    }
+    if (ratio > 1.6f)
+    {
+        float epsilon = -0.4f + 0.8393f * exp(-0.567f * log(ratio * ratio));
+        betaS = pow(10, epsilon);
+    }
+    float theta = atan2(k.y, k.x) - atan2(wind.y, wind.x);
+
+    return betaS / max(1e-7f, 2.0f * tanh(betaS * PI) * pow(cosh(betaS * theta), 2));
+
+}
+
+ float phillip(vec2 k){
+    float lengthk = length(k);
+    lengthk = max(0.001f,lengthk);
+    float lengthk2 = lengthk * lengthk;
+    float lengthk4 = lengthk2 * lengthk2;
+    float windspeed = length(wind);
+    float L = windspeed * windspeed/g;
+    float L2 = L* L;
+    return A * (exp(-1.0f/(lengthk2 * L2))/lengthk4* exp(-lengthk2 * L2*0.001f * 0.001f)) * DonelanBannerDirectionalSpreading(k);
+    //return A * (exp(-1.0f/(lengthk2 * L2))/lengthk4* exp(-lengthk2 * L2*0.001f * 0.001f)) * origindir(k,wind);
+ }
+
+ void heightgen(){
+    const uint N = gl_NumWorkGroups.x;
+    const uint M = gl_NumWorkGroups.y;
+    vec2 k = vec2(2*PI*gl_GlobalInvocationID.x/N- PI,2*PI*gl_GlobalInvocationID.y/M - PI);
+    vec2 Nd = NDrand();
+    vec2 h0 = Nd * sqrt(abs(phillip(k))/2);
+    vec2 h0c = Nd * sqrt(abs(phillip(-k))/2);
+    h0c.y *=-1.0f;
+    float w = dispersion(k) * time;
+    float c = cos(w);
+    float s = sin(w);
+    vec2 h1 = cmul(h0,vec2(c,s));
+    vec2 h2 = cmul(h0c, vec2(c,-s));
+
+    vec2 h = h1 + h2;
+    k /= max(0.001f,length(k));
+    vec2 KxHTilde = cmul(vec2(0,-k.x),h);
+    vec2 KyHTilde = cmul(vec2(0,-k.y),h);
+    imageStore(output_img, ivec2(gl_GlobalInvocationID.xy), vec4(h,0,1));
+    imageStore(output_disx, ivec2(gl_GlobalInvocationID.xy), vec4(KxHTilde,0,1));
+    imageStore(output_disy, ivec2(gl_GlobalInvocationID.xy), vec4(KyHTilde,0,1));
+ }
+void main(){
+    heightgen();
+	//imageStore(output_img, ivec2(gl_GlobalInvocationID.xy), vec4(1,1,1,1));
+}

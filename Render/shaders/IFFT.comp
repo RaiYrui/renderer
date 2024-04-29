@@ -1,0 +1,16 @@
+#version 430 core
+
+layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+
+layout(binding = 0) uniform image2D lut;
+layout(rgba32f, binding = 1) uniform image2D Buffer0;
+layout(rgba32f, binding = 2) uniform image2D Buffer1;
+
+layout (location = 0) uniform bool pingpong;
+layout (location = 1) uniform int stage;
+void HorizontalFFT(){
+	vec4 data = texture()
+}
+void main(){
+	
+}

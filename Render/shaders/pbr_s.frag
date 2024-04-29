@@ -1,9 +1,10 @@
-#version 330 core
+#version 430 core
 const float PI = 3.14159265359;
 in vec2 UV;
 in vec3 Fragpos;
 in vec3 Normal;
 in vec3 orinormal;
+in vec4 cpos;
 out vec4 FragColor;
 
 uniform vec3 Lightpos[100];
@@ -127,7 +128,11 @@ void main(){
     vec3 res = ambient + Lo;
     float w = (Lo.r+Lo.g+Lo.b)/3;
     res = res / (res + vec3(1.0));
-    res = pow(res, vec3(1.0/2.2));  
+    res = pow(res, vec3(1.0/2.2));
+    //ŒÌ–ß
+    //float distance = cpos.z/cpos.w;
+    //res = mix(res,vec3(0.2,0.1,0.05),(distance-0.99)*100);
+
     FragColor = vec4(res, clamp(w,diffuse.a,1.0));
 
 }

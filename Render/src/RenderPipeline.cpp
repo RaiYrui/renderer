@@ -17,6 +17,7 @@ namespace RR {
 		glGenFramebuffers(1, &this->FBO);
 		glGenRenderbuffers(1, &this->RBO);
 		this->window = Window::getInstance();
+		this->testGenTextures();
 	}
 	void RenderPipeline::Init(std::vector<RObject*>& entitylist) {
 		for (RObject* object : entitylist) {
@@ -28,7 +29,7 @@ namespace RR {
 		}
 		glGenTextures(1, &this->SRC);
 		glBindTexture(GL_TEXTURE_2D, this->SRC);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, this->window->width, this->window->height, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, this->window->width, this->window->height, 0, GL_RGBA, GL_FLOAT, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glBindRenderbuffer(GL_RENDERBUFFER, this->RBO);
@@ -56,11 +57,20 @@ namespace RR {
 			this->Renderquad();
 		}
 		this->window->setview();
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		glBindImageTexture(1, xdis, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		glBindImageTexture(2, ydis, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		computetest->use(this->size, this->size);
+		glBindImageTexture(0, luttex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+		lut->use(this->stagenum, this->size);
+
 		this->cam->use();
+
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, this->TRG);
+		glBindTexture(GL_TEXTURE_2D, this->texture);
 		this->cam->SetInt("src", 0);
 		this->Renderquad();
 	}
@@ -85,5 +95,60 @@ namespace RR {
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+
+
+
+	void RenderPipeline::testGenTextures() {
+		this->computetest = std::make_shared<ComputeShader>("../../../../Render/shaders/heightgen.comp");
+		this->computetest->Compile();
+		this->lut = std::make_shared<ComputeShader>("../../../../Render/shaders/Blut.comp");
+		this->lut->Compile();
+		const unsigned int TEXTURE_WIDTH = 128, TEXTURE_HEIGHT = 128;
+		this->size = 128;
+		this->stagenum = 7;
+		glGenTextures(1, &texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA,
+			GL_FLOAT, nullptr);
+		glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+
+		glGenTextures(1, &xdis);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, xdis);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA,
+			GL_FLOAT, nullptr);
+		glBindImageTexture(1, xdis, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+		glGenTextures(1, &ydis);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, ydis);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA,
+			GL_FLOAT, nullptr);
+		glBindImageTexture(2, ydis, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+
+		glGenTextures(1, &luttex);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, luttex);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, stagenum, TEXTURE_HEIGHT, 0, GL_RGBA,
+			GL_FLOAT, nullptr);
 	}
 }

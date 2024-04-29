@@ -40,7 +40,7 @@ namespace RR {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongBuffer[i], 0);
         }
-        this->amount = 10;
+        this->amount = 5;
         //×îÖÕÊä³öÖ¡»º³å
         glGenFramebuffers(1, &this->F_fbo);
         glGenRenderbuffers(1, &this->F_rbo);
