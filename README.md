@@ -11,7 +11,8 @@ PBR+HDR后处理
 
 ![image](https://github.com/RaiYrui/renderer/assets/73044017/95d74ef5-f9f9-46ec-be30-a92db9596514)
 
-![image](https://github.com/RaiYrui/renderer/assets/73044017/efc51a87-eeaf-429f-8e84-85cde41f67ba)
+![Renderer 2024-05-02 20-32-56](https://github.com/RaiYrui/renderer/assets/73044017/bca3300c-0569-4422-9c56-78855d8eecb4)
+
 
 IFFT变换的海面
 
