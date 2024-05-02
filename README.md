@@ -8,7 +8,10 @@ Gerstner
 
 
 PBR+HDR后处理
+
 ![image](https://github.com/RaiYrui/renderer/assets/73044017/95d74ef5-f9f9-46ec-be30-a92db9596514)
+
+![image](https://github.com/RaiYrui/renderer/assets/73044017/efc51a87-eeaf-429f-8e84-85cde41f67ba)
 
 IFFT变换的海面
 
