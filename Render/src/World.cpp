@@ -32,10 +32,10 @@ namespace RR {
 		cube->Renderqueue = 3000;
 		cube->name = "wave";
 		mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
-		mesh->Load("../../../../Render/mesh/waves.obj");
+		mesh->Load("../../../../Render/mesh/wavess.obj");
 		mesh->GPUupload();
-
 		EntityList.emplace_back(cube);
+		/*
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {
 				if (i == j&&i == 0)
@@ -50,13 +50,13 @@ namespace RR {
 			EntityList.emplace_back(copy);
 
 			}
-		}
+		}*/
 		/*
+		std::shared_ptr<Material> mat = std::make_shared<Material>();
 		RObject* cube2 = new RObject();
 		cube2->name = "cube2";
 		cube2->Renderqueue = 3000;
 		mesh = dynamic_cast<Mesh*>(cube2->AddComponent("Mesh"));
-		std::shared_ptr<Material> mat = std::make_shared<Material>();
 		cube2->MoveTo(glm::vec3(5, -5.5f, -15));
 		cube2->ScaleTo(glm::vec3(10, 10.0f, 10.0f));
 		mat->AddShader(std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag"));
@@ -68,7 +68,7 @@ namespace RR {
 		mesh->Load("../../../../Render/mesh/hair.obj");
 		mesh->GPUupload();
 		EntityList.emplace_back(cube2);
-
+		
 		RObject* head = new RObject();
 		head->name = "head";
 		mesh = dynamic_cast<Mesh*>(head->AddComponent("Mesh"));
@@ -83,6 +83,7 @@ namespace RR {
 		mesh->GPUupload();
 		EntityList.emplace_back(head);
 		*/
+		
 	}
 	std::shared_ptr<Camera> World::Maincamera() {
 		auto it = this->cameras.find("Maincamera");

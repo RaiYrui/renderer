@@ -27,13 +27,12 @@ vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent
 	float amplitude = (abs(wave.z)/(abs(wave.z)+1))/k;
 	 float speed = sqrt(9.8 / k);
 	float x = k*(dot(dir,originpos.xz) - speed*time);
-	float z = k*(originpos.z - time+0.5);
 	originpos.y += amplitude*sin(x);
 	originpos.x += amplitude*cos(x) * dir.x;
 	originpos.z += amplitude*cos(x) * dir.y;
 	float dy = amplitude*k*cos(x);
-	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x , dy* dir.x ,  0));
-	bitangent += normalize(vec3(0 ,  dy* dir.y  ,  1-amplitude*k*sin(x)* dir.y* dir.y));
+	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x , dy* dir.x ,  -amplitude*k*sin(x)*dir.x* dir.y));
+	bitangent += normalize(vec3(-amplitude*k*sin(x)* dir.x*dir.y ,  dy* dir.y  ,  1-amplitude*k*sin(x)* dir.y* dir.y));
 	return originpos;
 }
 float customRect(float x) {
@@ -77,9 +76,13 @@ void main(){
 	Wavepos += Gerstner(wavep,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent);
 	Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent);
+	//Wavepos.y += sin(Wavepos.x+time);
+	//Wavepos.y += sin(Wavepos.z +time);
+	//tangent = normalize(vec3(1 , cos(Wavepos.x) , 0));
+	//bitangent = normalize(vec3(0 ,  cos(Wavepos.z)  ,  1));
 	Fragpos =Wavepos;
 	UV = uvs;
-	Normal = cross(bitangent,tangent);
+	Normal = -cross(tangent,bitangent);
 	//Normal = normal;
 	orinormal = normal;
 	gl_Position = projection * view*  vec4(Wavepos,1.0f);

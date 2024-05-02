@@ -2,15 +2,58 @@
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
-layout(binding = 0) uniform image2D lut;
-layout(rgba32f, binding = 1) uniform image2D Buffer0;
-layout(rgba32f, binding = 2) uniform image2D Buffer1;
+layout(rgba32f, binding = 0) uniform image2D  lut;
+layout(rgba32f, binding = 1) uniform image2D  Buffer0;
+layout(rgba32f, binding = 2) uniform image2D  Buffer1;
 
 layout (location = 0) uniform bool pingpong;
 layout (location = 1) uniform int stage;
+layout (location = 2) uniform int H;
+
+vec2 cmul(vec2 c1, vec2 c2){
+    return vec2(c1.x * c2.x - c1.y*c2.y , c1.x * c2.y + c1.y * c2.x);
+}
+
 void HorizontalFFT(){
-	vec4 data = texture()
+	vec4 data = imageLoad(lut, ivec2(stage,gl_GlobalInvocationID.x));
+	vec2 ab = abs(data.ba);
+	if(pingpong){
+		vec2 pre = imageLoad(Buffer0, ivec2(ab.x,gl_GlobalInvocationID.y)).rg;
+		vec2 ad = imageLoad(Buffer0, ivec2(ab.y,gl_GlobalInvocationID.y)).rg;
+		vec2 res = cmul(vec2(data.r,-data.g), ad);
+		imageStore(Buffer1, ivec2(gl_GlobalInvocationID.xy) , vec4(pre + res,0,1));
+	}else{
+		vec2 pre = imageLoad(Buffer1, ivec2(ab.x,gl_GlobalInvocationID.y)).rg;
+		vec2 ad = imageLoad(Buffer1, ivec2(ab.y,gl_GlobalInvocationID.y)).rg;
+		vec2 res = cmul(vec2(data.r,-data.g), ad);
+		imageStore(Buffer0, ivec2(gl_GlobalInvocationID.xy) , vec4(pre + res,0,1));
+	}
+}
+void VerticalIFFT(){
+	vec4 data = imageLoad(lut, ivec2(stage,gl_GlobalInvocationID.y));
+	vec2 ab =abs(data.ba);
+	if(pingpong){
+		vec2 pre = imageLoad(Buffer0, ivec2(gl_GlobalInvocationID.x,ab.x)).rg;
+		vec2 ad = imageLoad(Buffer0, ivec2(gl_GlobalInvocationID.x,ab.y)).rg;
+		vec2 res = cmul(vec2(data.r,-data.g), ad);
+		imageStore(Buffer1, ivec2(gl_GlobalInvocationID.xy) , vec4(pre + res,0,1));
+	}else{
+		vec2 pre = imageLoad(Buffer1, ivec2(gl_GlobalInvocationID.x,ab.x)).rg;
+		vec2 ad = imageLoad(Buffer1, ivec2(gl_GlobalInvocationID.x,ab.y)).rg;
+		vec2 res = cmul(vec2(data.r,-data.g), ad);
+		imageStore(Buffer0, ivec2(gl_GlobalInvocationID.xy) , vec4(pre + res,0,1));
+	}
 }
 void main(){
-	
+	if(H==1){
+		HorizontalFFT();
+	}else if (H == 2){
+		VerticalIFFT();
+	}else{
+		vec2 res = imageLoad(Buffer0, ivec2(gl_GlobalInvocationID.x,gl_GlobalInvocationID.y)).rg;
+		res *= (1.0 - 2.0 * ((gl_GlobalInvocationID.x + gl_GlobalInvocationID.y) % 2));
+
+		float height = res.x/(gl_NumWorkGroups.x*gl_NumWorkGroups.x);
+		imageStore(Buffer0, ivec2(gl_GlobalInvocationID.xy) , vec4(height,height,height,1));
+	}
 }

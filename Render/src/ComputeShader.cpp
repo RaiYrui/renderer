@@ -48,16 +48,21 @@ namespace RR {
         glDeleteShader(compute);
         return this->computeid;
     }
-    void ComputeShader::use(const GLuint& width, const GLuint& height) {
+    void ComputeShader::use() {
         glUseProgram(this->computeid);
-        this->setFloat("time", glfwGetTime());
-        this->setVec2("wind", glm::vec2(1, 3));
-        this->setFloat("A", 1);
+    }
+    void ComputeShader::dispatch(const GLuint& width, const GLuint& height) {
         glDispatchCompute(width, height, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
     }
     void ComputeShader::setFloat(const std::string& name, const float& value) const {
         glUniform1f(glGetUniformLocation(this->computeid, name.c_str()), value);
+    }
+    void ComputeShader::setBool(const std::string& name, const bool& value) const {
+        glUniform1i(glGetUniformLocation(this->computeid, name.c_str()), (int)value);
+    }
+    void ComputeShader::setInt(const std::string& name, const int& value) const {
+        glUniform1i(glGetUniformLocation(this->computeid, name.c_str()), value);
     }
     void ComputeShader::setVec2(const std::string& name, const glm::vec2& value) const {
         glUniform2f(glGetUniformLocation(this->computeid, name.c_str()), value.x, value.y);

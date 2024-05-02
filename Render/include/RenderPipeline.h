@@ -26,14 +26,24 @@ namespace RR {
 
 		std::shared_ptr<ComputeShader> lut;
 		std::shared_ptr<ComputeShader> computetest;
+		std::shared_ptr<ComputeShader> ifft;
 		unsigned int size;
 		unsigned int luttex;
 		unsigned int texture;
 		unsigned int xdis;
 		unsigned int ydis;
+		unsigned int ddx;
+		unsigned int ddz;
+		unsigned int dyx;
+		unsigned int dyz;
+		unsigned int ddzx;
 		unsigned int stagenum;
+		bool pingpong;
+		int stage;
+		unsigned int b0, b1;
 		//测试
 		void testGenTextures();
+		void IFFT(unsigned int tex);
 	public:
 		//需要配置定制化的材质
 		RenderPipeline();

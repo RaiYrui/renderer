@@ -16,8 +16,11 @@ namespace RR {
 	public:
 		ComputeShader(const char* path);
 		GLuint Compile();
-		void use(const GLuint& width,const GLuint& height);
+		void dispatch(const GLuint& width,const GLuint& height);
+		void use();
 		void setFloat(const std::string& name, const float& value) const;
+		void setBool(const std::string& name, const bool& value) const;
+		void setInt(const std::string& name, const int& value) const;
 		void setVec2(const std::string& name, const glm::vec2& value) const;
 	};
 }

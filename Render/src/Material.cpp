@@ -2,6 +2,14 @@
 namespace RR {
 	std::unordered_map<std::string, GLuint> Material::shadermap;
 	uniform_data Material::env;
+	unsigned int Material::h;
+	unsigned int Material::x;
+	unsigned int Material::z;
+	unsigned int Material::dyx;
+	unsigned int Material::dyz;
+	unsigned int Material::ddx;
+	unsigned int Material::ddz;
+	unsigned int Material::ddzx;
 	Color::Color(float red, float green, float blue, float alpha) {
 		this->r = red;
 		this->g = green;
@@ -23,7 +31,7 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 0.976f);
+		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 1.0f);
 		this->w1 = glm::vec4(3.5f, 3.0f, 0.25f, 3.0f);
 		this->w2 = glm::vec4(-0.25f, -0.75f, 0.3f, 2.25f);
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
@@ -155,6 +163,8 @@ namespace RR {
 		
 	}
 	void Material::Pbruniform() {
+		
+
 		this->shader->SetVec4("color", this->color);
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
 		this->shader->SetFloat("time", glfwGetTime() * 0.5f);
@@ -179,6 +189,35 @@ namespace RR {
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, this->flowmap->Getinfo()->id);
 		this->shader->SetInt("flowmap", 2);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, this->h);
+		this->shader->SetInt("height", 3);
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, this->x);
+		this->shader->SetInt("xdis", 4);
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_2D, this->z);
+		this->shader->SetInt("zdis", 5);
+
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_2D, this->dyx);
+		this->shader->SetInt("dyx", 6);
+
+		glActiveTexture(GL_TEXTURE7);
+		glBindTexture(GL_TEXTURE_2D, this->dyz);
+		this->shader->SetInt("dyz", 7);
+
+		glActiveTexture(GL_TEXTURE8);
+		glBindTexture(GL_TEXTURE_2D, this->ddx);
+		this->shader->SetInt("ddx", 8);
+
+		glActiveTexture(GL_TEXTURE9);
+		glBindTexture(GL_TEXTURE_2D, this->ddz);
+		this->shader->SetInt("ddz", 9);
+
+		glActiveTexture(GL_TEXTURE10);
+		glBindTexture(GL_TEXTURE_2D, this->ddzx);
+		this->shader->SetInt("ddzx", 10);
 	}
 	void Material::ulituniform() {
 		this->shader->SetVec4("color", this->color);

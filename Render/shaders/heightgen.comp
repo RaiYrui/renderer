@@ -5,6 +5,11 @@ layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout(rgba32f, binding = 0) uniform image2D output_img;
 layout(rgba32f, binding = 1) uniform image2D output_disx;
 layout(rgba32f, binding = 2) uniform image2D output_disy;
+layout(rgba32f, binding = 3) uniform image2D output_ddx;
+layout(rgba32f, binding = 4) uniform image2D output_ddz;
+layout(rgba32f, binding = 5) uniform image2D output_dyx;
+layout(rgba32f, binding = 6) uniform image2D output_dyz;
+layout(rgba32f, binding = 7) uniform image2D output_ddzx;
 layout (location = 0) uniform float time;
 layout (location = 1) uniform vec2 wind;
 layout (location = 2) uniform float A;
@@ -119,11 +124,26 @@ float DonelanBannerDirectionalSpreading(vec2 k)
 
     vec2 h = h1 + h2;
     k /= max(0.001f,length(k));
-    vec2 KxHTilde = cmul(vec2(0,-k.x),h);
-    vec2 KyHTilde = cmul(vec2(0,-k.y),h);
+    vec3 wave = vec3(k.x,1,k.y);
+    //vec2 KxHTilde = cmul(vec2(k.x,0),h);
+    vec2 KxHTilde = vec2(-h.y,h.x) * wave.x * wave.y;
+    //vec2 KyHTilde = cmul(vec2(k.y,0),h) ;
+    vec2 KyHTilde = vec2(-h.y,h.x) * wave.z*wave.y;
+
+    vec2 dyx = vec2(-h.y,h.x) * wave.x;
+    vec2 dyz = vec2(-h.y,h.x) * wave.z;
+
+    vec2 ddx = -h * wave.x * wave.x * wave.y;
+    vec2 ddz = -h * wave.z * wave.z * wave.y;
+    vec2 ddzx = -h * wave.x * wave.z * wave.y;
     imageStore(output_img, ivec2(gl_GlobalInvocationID.xy), vec4(h,0,1));
     imageStore(output_disx, ivec2(gl_GlobalInvocationID.xy), vec4(KxHTilde,0,1));
     imageStore(output_disy, ivec2(gl_GlobalInvocationID.xy), vec4(KyHTilde,0,1));
+    imageStore(output_dyx, ivec2(gl_GlobalInvocationID.xy), vec4(dyx,0,1));
+    imageStore(output_dyz, ivec2(gl_GlobalInvocationID.xy), vec4(dyz,0,1));
+    imageStore(output_ddx, ivec2(gl_GlobalInvocationID.xy), vec4(ddx,0,1));
+    imageStore(output_ddz, ivec2(gl_GlobalInvocationID.xy), vec4(ddz,0,1));
+    imageStore(output_ddzx, ivec2(gl_GlobalInvocationID.xy), vec4(ddzx,0,1));
  }
 void main(){
     heightgen();

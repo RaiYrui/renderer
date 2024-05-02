@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "Resources.h"
 #include "Type.h"
+#include"ComputeShader.h"
 namespace RR {
 	//渲染设置
 	enum ConfigType
@@ -44,9 +45,12 @@ namespace RR {
 		float mat, rough, ao;
 		glm::vec2 particle[50];
 		glm::vec2 psam[50];
+
 	public:
 		//天空盒
 		static uniform_data env;
+		
+		static unsigned int h,x,z,dyx,dyz,ddx,ddz,ddzx;
 		//UI对接
 		void Render_ui();
 		void Compileshader();
