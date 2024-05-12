@@ -35,8 +35,8 @@ namespace RR {
 		mesh->Load("../../../../Render/mesh/wavess.obj");
 		mesh->GPUupload();
 		EntityList.emplace_back(cube);
-		/*
-		for (int i = 0; i < 3; ++i) {
+		
+		/*for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {
 				if (i == j&&i == 0)
 					continue;

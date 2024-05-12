@@ -41,6 +41,7 @@ namespace RR {
 		void ulituniform();
 		//≤‚ ‘”√
 		glm::vec4 w1, w2, w3;
+		float random;
 		glm::vec4 nst;
 		float mat, rough, ao;
 		glm::vec2 particle[50];

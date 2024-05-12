@@ -14,6 +14,7 @@ uniform int particlenum;
 uniform vec2 dir[100];
 uniform vec2 pivot[100];
 uniform sampler2D flowmap;
+uniform float random;
 out vec3 Fragpos;
 out vec3 Normal;
 out vec2 UV;
@@ -21,15 +22,24 @@ out vec3 orinormal;
 out vec4 cpos;
 
 const vec2 ranpos = vec2(0.5,0.5);
-vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent){
-	vec2 dir = normalize(wave.xy);
+
+float frac(float x) {
+    return x - floor(x);
+}
+float Random(int seed)
+{         
+    return frac(sin(dot(vec2(seed,2), vec2(12.9898, 78.233))) ) * 2 - 1;
+}
+vec3 Gerstner(vec4 wave,vec3 originpos, inout vec3 tangent, inout vec3 bitangent,inout int index){
+	vec2 dir = normalize(mix(normalize(wave.xy),vec2(Random(index),Random(index*2)),random));
+	//vec2 dir = normalize(wave.xy);
 	float  k = (2*PI)/max(1,wave.w);
-	float amplitude = (abs(wave.z)/(abs(wave.z)+1))/k;
-	 float speed = sqrt(9.8 / k);
+	float amplitude = (abs(wave.z)/(abs(wave.z)+1))/(k);
+	 float speed = sqrt(9.8 * k);
 	float x = k*(dot(dir,originpos.xz) - speed*time);
-	originpos.y += amplitude*sin(x);
-	originpos.x += amplitude*cos(x) * dir.x;
-	originpos.z += amplitude*cos(x) * dir.y;
+	originpos.y = amplitude*sin(x);
+	originpos.x = amplitude*cos(x) * dir.x;
+	originpos.z = amplitude*cos(x) * dir.y;
 	float dy = amplitude*k*cos(x);
 	tangent += normalize(vec3(1-amplitude*k*sin(x)* dir.x* dir.x , dy* dir.x ,  -amplitude*k*sin(x)*dir.x* dir.y));
 	bitangent += normalize(vec3(-amplitude*k*sin(x)* dir.x*dir.y ,  dy* dir.y  ,  1-amplitude*k*sin(x)* dir.y* dir.y));
@@ -43,6 +53,7 @@ float customRect(float x) {
 		return 0.5f;
 	return 0;
 }
+
 vec3 Partical(vec3 origin,vec2 dir,float step,vec2 pivot){
 	//float  k = (2*PI)/max(1,wave.w);
 	//origin.y += (cos((2*PI)*(origin.x+time)/5)) * customRect((origin.x+time)/5)*(cos((2*PI)*(origin.z+time)/5))* customRect((origin.z+time)/5);
@@ -73,9 +84,11 @@ void main(){
 		Wavepos += Partical(position.xyz,direction,6,pivot[i]);
 	}
 	//position = model *vec4(Wavepos,1.0);
-	Wavepos += Gerstner(wavep,position.xyz,tangent,bitangent);
-	Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent);
-	Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent);
+	int index= 1;
+	for(index;index<6;index++)
+		Wavepos += Gerstner(wavep,position.xyz,tangent,bitangent,index);
+	//Wavepos += Gerstner(wavep2,position.xyz,tangent,bitangent,index);
+	//Wavepos += Gerstner(wavep3,position.xyz,tangent,bitangent,index);
 	//Wavepos.y += sin(Wavepos.x+time);
 	//Wavepos.y += sin(Wavepos.z +time);
 	//tangent = normalize(vec3(1 , cos(Wavepos.x) , 0));
