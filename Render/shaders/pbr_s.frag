@@ -101,7 +101,7 @@ void main(){
     float f = pow(1.0 - clamp(dot(blendn,V),0.0,1.0),5.0f);
 	vec3 R = reflect(-V,blendn);
 	vec4 refcolor = vec4(texture(cubemap,R).rgb,1.0f);
-    //diffuse.rgb*= (refcolor.rgb*f);
+    diffuse.rgb*= (refcolor.rgb*f);
     vec3 F0 = vec3(0.04); 
     F0 = mix(F0, diffuse.rgb, metallic);
     vec3 Lo = vec3(0.0);
@@ -137,7 +137,7 @@ void main(){
     //float distance = cpos.z/cpos.w;
     //res = mix(res,vec3(0.2,0.1,0.05),(distance-0.99)*100);
     //vec4 colorrr = texture(height,UV);
-    FragColor = vec4(res+max((0.01-foam),0), clamp(w,diffuse.a,1.0));
+    FragColor = vec4(res+max((0.01-foam)*0.2,0), clamp(w,diffuse.a,1.0));
     //FragColor = colorrr;
 
 }
