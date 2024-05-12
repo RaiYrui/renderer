@@ -52,7 +52,7 @@ namespace RR {
 		glBindImageTexture(7, ddzx, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 		computetest->use();
 		computetest->setFloat("time", glfwGetTime());
-		computetest->setVec2("wind", glm::vec2(5, 8));
+		computetest->setVec2("wind", glm::vec2(3, 5));
 		computetest->setFloat("A", 1);
 		computetest->dispatch(this->size, this->size);
 		glBindImageTexture(0, luttex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);

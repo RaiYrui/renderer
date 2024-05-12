@@ -89,8 +89,8 @@ void main(){
 	vec3 N = normalize(Normal);
     vec3 V = normalize(Campos - Fragpos);
     vec4 diffuse = color;
-    vec3 blendn = blendNormals(nmap,orinormal,0.9f);
-    //vec3 blendn = orinormal;
+    //vec3 blendn = blendNormals(nmap,orinormal,0.9f);
+    vec3 blendn = orinormal;
      //’€…‰
     float ratio = 1.00 / 1.52;
     vec3 refraction = refract(-V, blendn, ratio);

@@ -35,14 +35,15 @@ namespace RR {
 		this->w1 = glm::vec4(3.5f, 3.0f, 0.25f, 3.0f);
 		this->w2 = glm::vec4(-0.25f, -0.75f, 0.3f, 2.25f);
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
+		this->random = 1.0f;
 		this->maintex = std::make_shared<Texture>("maintex");
 		this->maintex->LoadTexture("../../../../Render/tex/normalMap.png");
 		this->flowmap = std::make_shared<Texture>("flowmap");
 		this->flowmap->LoadTexture("../../../../Render/tex/flown.png");
 		this->nst = glm::vec4(1.0f,2.0f,2.0f,0.75f);
-		this->mat = 1;
+		this->mat = 0.9;
 		this->rough = 0.08;
-		this->ao = 1;
+		this->ao = 0.4;
 		this->shader = std::make_shared<Shader>("../../../../Render/shaders/common.vert", "../../../../Render/shaders/common.frag");
 		std::random_device rd;
 		std::mt19937 gen(rd());
@@ -61,6 +62,7 @@ namespace RR {
 		this->w1 = mat.w1;
 		this->w2 = mat.w2;
 		this->w3 = mat.w3;
+		this->random = mat.random;
 		this->maintex = std::make_shared<Texture>(*mat.maintex.get());
 		this->flowmap = std::make_shared<Texture>(*mat.flowmap.get());
 		this->shader = mat.shader;
@@ -166,6 +168,7 @@ namespace RR {
 		
 
 		this->shader->SetVec4("color", this->color);
+		this->shader->SetFloat("random", this->random);
 		//glGetInteger(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
 		this->shader->SetFloat("time", glfwGetTime() * 0.5f);
 		this->shader->SetVec4("wavep", this->w1);
@@ -243,12 +246,16 @@ namespace RR {
 		ImGui::DragFloat("y3 dir", &this->w3.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("amplitude3", &this->w3.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("k3", &this->w3.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::Text("NST");
 		ImGui::DragFloat("nstx", &this->nst.x, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("nsty", &this->nst.y, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("nstz", &this->nst.z, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
 		ImGui::DragFloat("nstw", &this->nst.w, 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::Text("PBR");
 		ImGui::DragFloat("mat", &this->mat, 0.05f, 0, 1, "%.3f");
 		ImGui::DragFloat("rough", &this->rough, 0.05f, 0, 1, "%.3f");
 		ImGui::DragFloat("ao", &this->ao, 0.05f, 0, 1, "%.3f");
+		ImGui::Text("dir");
+		ImGui::DragFloat("random", &this->random, 0.05f, 0, 1, "%.3f");
 	}
 }
