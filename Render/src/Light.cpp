@@ -34,6 +34,7 @@ namespace RR {
 		Mesh::global_uniform["Intensity[" + std::to_string(this->id) + "]"]->data.floatvalue = this->intensity;
 		Mesh::global_uniform["Lightnum"]->data.intvalue = Light::tid; 
 		Mesh::global_uniform["Lightdir"]->data.Vec3 = this->dir;
+		Skybox::lightdir = this->dir;
 	}
 	glm::vec3 Light::Getpos() {
 		return this->transform->Position();

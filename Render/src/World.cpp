@@ -31,26 +31,27 @@ namespace RR {
 		RObject* cube = new RObject();
 		cube->Renderqueue = 3000;
 		cube->name = "wave";
+		cube->ScaleTo(glm::vec3(3, 1, 3));
 		mesh = dynamic_cast<Mesh*>(cube->AddComponent("Mesh"));
 		mesh->Load("../../../../Render/mesh/wavess.obj");
 		mesh->GPUupload();
 		EntityList.emplace_back(cube);
 		
-		/*for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 3; ++j) {
 				if (i == j&&i == 0)
 					continue;
 			RObject* copy = new RObject(*cube);
-			copy->MoveTo(glm::vec3(10*i, 0, 10*j));
+			copy->MoveTo(glm::vec3(30*i, 0, 30*j));
 			EntityList.emplace_back(copy);
 			if (i == 0)
 				continue;
 			copy = new RObject(*cube);
-			copy->MoveTo(glm::vec3(-10 * i, 0, 10 * j));
+			copy->MoveTo(glm::vec3(-30 * i, 0, 30 * j));
 			EntityList.emplace_back(copy);
 
 			}
-		}*/
+		}
 		/*
 		std::shared_ptr<Material> mat = std::make_shared<Material>();
 		RObject* cube2 = new RObject();

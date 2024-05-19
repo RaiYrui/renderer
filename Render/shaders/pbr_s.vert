@@ -20,7 +20,7 @@ uniform sampler2D ddz;
 
 void main(){
     vec3 p = pos;
-	vec4 position = model * vec4(pos,1.0f);
+	vec4 position = vec4(pos,1.0f);
 	UV = uvs;
 	float h = texture(height,uvs).r;
 	float xd = texture(xdis,uvs).r;
@@ -40,7 +40,7 @@ void main(){
 	vec2 slope = vec2(-dyxf/(1+ddxf),-dyzf/(1+ddzf));
 	vec3 n = vec3(slope.x,1,slope.y);
 	Fragpos = position.xyz;
-	gl_Position = projection * view * position;
+	gl_Position = projection * view *model *  position;
 	Normal = normalize(n);
 	orinormal =  normalize(n);
 }

@@ -2,6 +2,7 @@
 namespace RR {
     glm::mat4 Skybox::v;
     glm::mat4 Skybox::p;
+    glm::vec3 Skybox::lightdir;
 	Skybox::Skybox() {
 		this->tex = std::make_shared<Texture>("map");
         this->sky_shader = std::make_shared<Shader>("../../../../Render/shaders/skybox.vert", "../../../../Render/shaders/skybox.frag");
@@ -63,8 +64,10 @@ namespace RR {
         this->sky_shader->use();
         this->sky_shader->SetMat4("view", v);
         this->sky_shader->SetMat4("projection", p);
+        this->sky_shader->SetVec3("lightdir", this->lightdir);
         glActiveTexture(GL_TEXTURE0);
         this->sky_shader->SetInt("cubemap", 0);
+
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 36);

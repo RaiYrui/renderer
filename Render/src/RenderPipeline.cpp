@@ -39,6 +39,7 @@ namespace RR {
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 			std::cout << "Framebuffer not complete!" << std::endl;
 		this->testGenTextures();
+		this->wind = new glm::vec2(5, 8);
 	}
 	void RenderPipeline::Start(std::vector<RObject*>& entitylist) {
 
@@ -51,8 +52,9 @@ namespace RR {
 		glBindImageTexture(6, dyz, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 		glBindImageTexture(7, ddzx, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
 		computetest->use();
+		this->wind = Material::wind;
 		computetest->setFloat("time", glfwGetTime());
-		computetest->setVec2("wind", glm::vec2(5, 8));
+		computetest->setVec2("wind", *wind);
 		computetest->setFloat("A", 1);
 		computetest->dispatch(this->size, this->size);
 		glBindImageTexture(0, luttex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);

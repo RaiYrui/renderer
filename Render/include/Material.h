@@ -50,7 +50,7 @@ namespace RR {
 	public:
 		//Ìì¿ÕºÐ
 		static uniform_data env;
-		
+		static glm::vec2* wind;
 		static unsigned int h,x,z,dyx,dyz,ddx,ddz,ddzx;
 		//UI¶Ô½Ó
 		void Render_ui();

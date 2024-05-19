@@ -10,6 +10,7 @@ namespace RR {
 	unsigned int Material::ddx;
 	unsigned int Material::ddz;
 	unsigned int Material::ddzx;
+	glm::vec2* Material::wind;
 	Color::Color(float red, float green, float blue, float alpha) {
 		this->r = red;
 		this->g = green;
@@ -31,7 +32,7 @@ namespace RR {
 
 	Material::Material() {
 		this->type = Normal;
-		this->color = glm::vec4(0.055f, 0.6f, 0.8f, 1.0f);
+		this->color = glm::vec4(0.0235f, 0.196f, 0.4745f, 1.0f);
 		this->w1 = glm::vec4(3.5f, 3.0f, 0.25f, 3.0f);
 		this->w2 = glm::vec4(-0.25f, -0.75f, 0.3f, 2.25f);
 		this->w3 = glm::vec4(6.0f, -6.0f, 0.45f, 1.75f);
@@ -48,13 +49,14 @@ namespace RR {
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<float> dis(0.0f,1.0f);
-		std::uniform_real_distribution<float> dis2(-20.0f, 20.0f);
+		std::uniform_real_distribution<float> dis2(-10.0f, 10.0f);
 		for (int i = 0; i < 50; ++i) {
 			this->psam[i].x = dis(gen);
 			this->psam[i].y = dis(gen);
 			this->particle[i].x = dis2(gen);
 			this->particle[i].y = dis2(gen);
 		}
+		this->wind = new glm::vec2(5, 8);
 	}
 	Material::Material(const Material& mat) {
 		this->type = mat.type;
@@ -257,5 +259,8 @@ namespace RR {
 		ImGui::DragFloat("ao", &this->ao, 0.05f, 0, 1, "%.3f");
 		ImGui::Text("dir");
 		ImGui::DragFloat("random", &this->random, 0.05f, 0, 1, "%.3f");
+		ImGui::Text("wind");
+		ImGui::DragFloat("windx", &this->wind->x, 0.05f, -FLT_MAX, FLT_MAX, "%.3f");
+		ImGui::DragFloat("windy", &this->wind->y, 0.05f, -FLT_MAX, FLT_MAX, "%.3f");
 	}
 }

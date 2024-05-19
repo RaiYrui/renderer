@@ -26,7 +26,7 @@ uniform sampler2D ddzx;
 
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = (texture(maintex, vec2(UV.x-(time*0.1f),UV.y-(time*0.1f)) * NST.xy  * NST.zw).rgb * 2.0 - 1.0)*5;
+    vec3 tangentNormal = (texture(maintex, vec2(UV.x-(time*0.1f),UV.y+(time*0.1f)) * NST.xy  * NST.zw).rgb * 2.0 - 1.0)*5;
 
     vec3 Q1  = dFdx(Fragpos);
     vec3 Q2  = dFdy(Fragpos);
@@ -89,29 +89,32 @@ void main(){
 	vec3 N = normalize(Normal);
     vec3 V = normalize(Campos - Fragpos);
     vec4 diffuse = color;
-    //vec3 blendn = blendNormals(nmap,orinormal,0.9f);
-    vec3 blendn = orinormal;
+   vec3 blendn = blendNormals(nmap,orinormal,0.6f);
+   // vec3 blendn = orinormal;
      //’€…‰
     float ratio = 1.00 / 1.52;
     vec3 refraction = refract(-V, blendn, ratio);
 	vec4 refracolor = vec4(texture(cubemap,refraction).rgb,1.0f);
     diffuse.rgb = mix(refracolor.rgb,diffuse.rgb,diffuse.a);
-
-    //∑¥…‰
-    float f = pow(1.0 - clamp(dot(blendn,V),0.0,1.0),5.0f);
-	vec3 R = reflect(-V,blendn);
-	vec4 refcolor = vec4(texture(cubemap,R).rgb,1.0f);
-    diffuse.rgb*= (refcolor.rgb*f);
     vec3 F0 = vec3(0.04); 
     F0 = mix(F0, diffuse.rgb, metallic);
     vec3 Lo = vec3(0.0);
+     //∑¥…‰
+    float f = pow(1.0 - clamp(dot(blendn,V),0.0,1.0),3.0f);
+	vec3 R = reflect(-V,blendn);
+	vec4 refcolor = vec4(texture(cubemap,R).rgb,1.0f);
+    //—’…´∆´“∆
     for(int i = 0; i < Lightnum; ++i) 
     {
         vec3 L = normalize(-Lightdir);
         vec3 H = normalize(V + L);
         float distance    = length(Lightpos[i] - Fragpos);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = Lightcolor[i].rgb * attenuation * Intensity[i];        
+        float NdotL = max(dot(blendn, L), 0.0);
+        vec3 lightcolor = Lightcolor[i].rgb;
+       lightcolor.b *= NdotL;
+       lightcolor.g *= clamp(NdotL,0.3,1.0);
+        vec3 radiance     = lightcolor.rgb * attenuation * Intensity[i];        
 
         float NDF = DistributionGGX(blendn, H, roughness);        
         float G   = GeometrySmith(blendn, V, L, roughness);      
@@ -123,10 +126,12 @@ void main(){
 
         vec3 nominator    = NDF * G * F;
         float denominator = 4.0 * max(dot(blendn, V), 0.0) * max(dot(blendn, L), 0.0) + 0.001; 
-        vec3 specular     = nominator / denominator;
-        float NdotL = max(dot(blendn, L), 0.0);                
+        vec3 specular     = nominator / denominator;          
         Lo += (kD * diffuse.rgb / PI + specular) * radiance * NdotL* Intensity[i]; 
+        refcolor *= NdotL;
+        //diffuse.rgb *= NdotL;
     }   
+    diffuse.rgb = mix(diffuse.rgb,(refcolor.rgb),f);
     vec3 ambient = vec3(0.05) * diffuse.rgb * ao;
     vec3 res = ambient + Lo;
     float w = (Lo.r+Lo.g+Lo.b)/3;
@@ -137,7 +142,7 @@ void main(){
     //float distance = cpos.z/cpos.w;
     //res = mix(res,vec3(0.2,0.1,0.05),(distance-0.99)*100);
     //vec4 colorrr = texture(height,UV);
-    FragColor = vec4(res+max((0.01-foam)*0.2,0), clamp(w,diffuse.a,1.0));
+    FragColor = vec4(res+max((0.01-foam)*0.5,0), clamp(w,diffuse.a,1.0));
     //FragColor = colorrr;
 
 }

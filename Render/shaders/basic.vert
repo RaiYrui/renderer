@@ -76,14 +76,13 @@ vec3 Partical(vec3 origin,vec2 dir,float step,vec2 pivot){
 	return origin;
 }
 void main(){
-	vec4 position = model *vec4(Pos,1.0);
+	vec4 position = vec4(Pos,1.0);
 	vec3 tangent,bitangent;
 	vec3 Wavepos = position.xyz;
 	for(int i = 0; i < particlenum;++i){
 		vec2 direction = texture(flowmap,dir[i]).rg*2.0-1.0;
 		Wavepos += Partical(position.xyz,direction,6,pivot[i]);
 	}
-	//position = model *vec4(Wavepos,1.0);
 	int index= 1;
 	for(index;index<6;index++)
 		Wavepos += Gerstner(wavep,position.xyz,tangent,bitangent,index);
@@ -97,8 +96,8 @@ void main(){
 	UV = uvs;
 	Normal = -cross(tangent,bitangent);
 	//Normal = normal;
-	orinormal = normal;
-	gl_Position = projection * view*  vec4(Wavepos,1.0f);
+	orinormal = Normal;
+	gl_Position = projection * view* model * vec4(Wavepos,1.0f);
 	cpos = gl_Position;
 	//Normal = normal;
 }

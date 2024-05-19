@@ -44,6 +44,7 @@ namespace RR {
 		//测试
 		void testGenTextures();
 		void IFFT(unsigned int tex);
+		glm::vec2* wind;
 	public:
 		//需要配置定制化的材质
 		RenderPipeline();

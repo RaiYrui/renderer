@@ -25,7 +25,7 @@ namespace RR {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, src);
 		this->shader->SetInt("src", 0);
-		this->shader->SetFloat("exposure", 1.0f);
+		this->shader->SetFloat("exposure", 0.80f);
 		return this->rendertexture;
 	}
 }

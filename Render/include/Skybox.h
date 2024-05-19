@@ -21,6 +21,7 @@ namespace RR {
 		void Uploadbuffer();
 	public:
 		static glm::mat4 v, p;
+		static glm::vec3 lightdir;
 		Skybox();
 		//½«hdräÖÈ¾Îªcubemap
 		void Rendercube();
