@@ -20,7 +20,7 @@ int main()
 	if (app->Init())
 		app->Start();
 	else 
-		cout << "Init Failed" << endl;
+		cout << "Init Faihrfnfjksndjkfled" << endl;
 	cout << "Hello CMake." << endl;
 	return 0;
 }
